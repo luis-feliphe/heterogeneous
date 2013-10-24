@@ -124,7 +124,7 @@ public class SlaveFederate extends SigarCommandBase implements PtolemyFederate {
 	
 
 	private static String federateName = "ReadyToRun";
-	private static int slaveChannel = 1;
+	private static int slaveChannel = 3;
 
 
 	// ----------------------------------------------------------
@@ -430,9 +430,9 @@ public class SlaveFederate extends SigarCommandBase implements PtolemyFederate {
 
 		// get all the handle information for the attributes of ObjectRoot.A
 
-		int classHandle = rtiamb.getObjectClassHandle("ObjectRoot.Sensor");
+		int classHandle = rtiamb.getObjectClassHandle("ObjectRoot.aes");
 		// int classHandle = rtiamb.getObjectClassHandle( "ObjectRoot.string" );
-		int aaHandle = rtiamb.getAttributeHandle("idSensor", classHandle);
+		int aaHandle = rtiamb.getAttributeHandle("canal1", classHandle);
 
 		// int classHandle = rtiamb.getObjectClassHandle("InteractionRoot.X");
 		// int aaHandle = rtiamb.getAttributeHandle("xa", classHandle);
@@ -479,15 +479,15 @@ public class SlaveFederate extends SigarCommandBase implements PtolemyFederate {
 	 */
 	private void publishAndSubscribe(int channel) throws RTIexception {
 
-		int classHandle = rtiamb.getObjectClassHandle("ObjectRoot.Sensor");
+		int classHandle = rtiamb.getObjectClassHandle("ObjectRoot.aes");
 
 		int handle;
 		if (channel == 1){
-			handle = rtiamb.getAttributeHandle("idSensor", classHandle);
+			handle = rtiamb.getAttributeHandle("canal1", classHandle);
 		}else if (channel == 2){
-			handle = rtiamb.getAttributeHandle("time", classHandle);
+			handle = rtiamb.getAttributeHandle("canal2", classHandle);
 		}else{
-			handle = rtiamb.getAttributeHandle("pessoa", classHandle);
+			handle = rtiamb.getAttributeHandle("canal3", classHandle);
 		}
 		
 		AttributeHandleSet attributes = RtiFactoryFactory.getRtiFactory()
@@ -508,7 +508,7 @@ public class SlaveFederate extends SigarCommandBase implements PtolemyFederate {
 	 * simulation, we will update the attribute values for this instance
 	 */
 	private int registerObject() throws RTIexception {
-		int classHandle = rtiamb.getObjectClassHandle("ObjectRoot.Sensor");
+		int classHandle = rtiamb.getObjectClassHandle("ObjectRoot.aes");
 		// int classHandle = rtiamb.getObjectClassHandle("InteractionRoot.X");
 		return rtiamb.registerObjectInstance(classHandle);
 	}
@@ -532,14 +532,14 @@ public class SlaveFederate extends SigarCommandBase implements PtolemyFederate {
 
 		String[] valores = data.split(" - ");
 
-		byte[] aaValue = EncodingHelpers.encodeString("idSensor:" + valores[0]);
-		byte[] abValue = EncodingHelpers.encodeString("time:" + valores[0]);
-		byte[] acValue = EncodingHelpers.encodeString("pessoa:" + valores[0]);
+		byte[] aaValue = EncodingHelpers.encodeString("canal1:" + valores[0]);
+		byte[] abValue = EncodingHelpers.encodeString("canal2:" + valores[0]);
+		byte[] acValue = EncodingHelpers.encodeString("canal3:" + valores[0]);
 
 		int classHandle = rtiamb.getObjectClass(objectHandle);
-		int aaHandle = rtiamb.getAttributeHandle("idSensor", classHandle);
-		int abHandle = rtiamb.getAttributeHandle("time", classHandle);
-		int acHandle = rtiamb.getAttributeHandle("pessoa", classHandle);
+		int aaHandle = rtiamb.getAttributeHandle("canal1", classHandle);
+		int abHandle = rtiamb.getAttributeHandle("canal2", classHandle);
+		int acHandle = rtiamb.getAttributeHandle("canal3", classHandle);
 		
 		attributes.add(aaHandle, aaValue);
 		attributes.add(abHandle, abValue);

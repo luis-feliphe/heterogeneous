@@ -444,10 +444,10 @@ public class MasterFederate extends SigarCommandBase implements PtolemyFederate 
 
 		// get all the handle information for the attributes of ObjectRoot.A
 		
-		int classHandle = rtiamb.getObjectClassHandle("ObjectRoot.Sensor");
-		int aaHandle = rtiamb.getAttributeHandle("idSensor", classHandle);
-        int abHandle    = rtiamb.getAttributeHandle( "time", classHandle );  
-        int acHandle    = rtiamb.getAttributeHandle( "pessoa", classHandle );  
+		int classHandle = rtiamb.getObjectClassHandle("ObjectRoot.aes");
+		int aaHandle = rtiamb.getAttributeHandle("canal1", classHandle);
+        int abHandle    = rtiamb.getAttributeHandle( "canal2", classHandle );  
+        int acHandle    = rtiamb.getAttributeHandle( "canal3", classHandle );  
 
         
 		//int classHandle = rtiamb.getObjectClassHandle("InteractionRoot.X");
@@ -496,7 +496,7 @@ public class MasterFederate extends SigarCommandBase implements PtolemyFederate 
 	 * simulation, we will update the attribute values for this instance
 	 */
 	private int registerObject() throws RTIexception {
-		int classHandle = rtiamb.getObjectClassHandle("ObjectRoot.Sensor");
+		int classHandle = rtiamb.getObjectClassHandle("ObjectRoot.aes");
 		//int classHandle = rtiamb.getObjectClassHandle("InteractionRoot.X");
 		return rtiamb.registerObjectInstance(classHandle);
 	}
@@ -524,14 +524,14 @@ public class MasterFederate extends SigarCommandBase implements PtolemyFederate 
 
 		String[] valores = data.split(" - ");
 
-        byte[] aaValue = EncodingHelpers.encodeString( "idSensor:" + valores[0] );  
-        byte[] abValue = EncodingHelpers.encodeString( "time:" + valores[0] );  
-        byte[] acValue = EncodingHelpers.encodeString( "pessoa:" + valores[0] );  
+        byte[] aaValue = EncodingHelpers.encodeString( "canal1:" + valores[0] );  
+        byte[] abValue = EncodingHelpers.encodeString( "canal2:" + valores[0] );  
+        byte[] acValue = EncodingHelpers.encodeString( "canal3:" + valores[0] );  
 
         int classHandle = rtiamb.getObjectClass( objectHandle );  
-        int aaHandle = rtiamb.getAttributeHandle( "idSensor", classHandle );  
-        int abHandle = rtiamb.getAttributeHandle( "time", classHandle );  
-        int acHandle = rtiamb.getAttributeHandle( "pessoa", classHandle );
+        int aaHandle = rtiamb.getAttributeHandle( "canal1", classHandle );  
+        int abHandle = rtiamb.getAttributeHandle( "canal2", classHandle );  
+        int acHandle = rtiamb.getAttributeHandle( "canal3", classHandle );
 
         attributes.add( aaHandle, aaValue );  
         attributes.add( abHandle, abValue );  
