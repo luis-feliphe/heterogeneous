@@ -1,0 +1,83 @@
+<?xml version="1.0" standalone="no"?>
+<!DOCTYPE entity PUBLIC "-//UC Berkeley//DTD MoML 1//EN"
+    "http://ptolemy.eecs.berkeley.edu/xml/dtd/MoML_1.dtd">
+<entity name="fsm_sdf_exemple_master" class="ptolemy.actor.TypedCompositeActor">
+    <property name="_createdBy" class="ptolemy.kernel.attributes.VersionAttribute" value="7.0.1">
+    </property>
+    <property name="_windowProperties" class="ptolemy.actor.gui.WindowPropertiesAttribute" value="{bounds={-8, -8, 1382, 744}, maximized=true}">
+    </property>
+    <property name="_vergilSize" class="ptolemy.actor.gui.SizeAttribute" value="[1159, 628]">
+    </property>
+    <property name="_vergilZoomFactor" class="ptolemy.data.expr.ExpertParameter" value="2.1112312859339">
+    </property>
+    <property name="_vergilCenter" class="ptolemy.data.expr.ExpertParameter" value="{189.484375, 90.9940007549612}">
+    </property>
+    <property name="MasterHLADEDirector" class="ptolemy.myactors.deslocamentoDeChuva.certi.domain.MasterHLADEDirector">
+        <property name="federateName" class="ptolemy.data.expr.StringParameter" value="PtolemyMasterFederate">
+        </property>
+        <property name="federateFile" class="ptolemy.data.expr.StringParameter" value="C://Users//Angelo//Desktop//mestrado//Arquiteura de Computadores//Simuladores//workspace//SimulatorCerti//src//ptolemy//myactors//deslocamentoDeChuva//certi//testfom.fed">
+        </property>
+        <property name="stopTime" class="ptolemy.data.expr.Parameter" value="Infinity">
+        </property>
+        <property name="_location" class="ptolemy.kernel.util.Location" value="[-20.0, -5.0]">
+        </property>
+    </property>
+    <entity name="Clock" class="ptolemy.actor.lib.Clock">
+        <property name="period" class="ptolemy.actor.parameters.PortParameter" value="1.0">
+        </property>
+        <property name="offsets" class="ptolemy.data.expr.Parameter" value="{0.0}">
+        </property>
+        <property name="values" class="ptolemy.data.expr.Parameter" value="{1.0}">
+        </property>
+        <property name="numberOfCycles" class="ptolemy.data.expr.Parameter" value="UNBOUNDED">
+        </property>
+        <doc>Create a set of pulses</doc>
+        <property name="_location" class="ptolemy.kernel.util.Location" value="[-55.0, 80.0]">
+        </property>
+        <property name="_icon" class="ptolemy.vergil.icon.XMLIcon">
+        </property>
+    </entity>
+    <entity name="MasterFederateActor" class="ptolemy.myactors.deslocamentoDeChuva.certi.MasterFederateActor">
+        <doc>HLA Actor.</doc>
+        <property name="_location" class="ptolemy.kernel.util.Location" value="[250.0, 90.0]">
+        </property>
+        <property name="timeWindow" class="ptolemy.data.expr.Parameter" value="1">
+        </property>
+        <port name="output" class="ptolemy.actor.TypedIOPort">
+            <property name="output"/>
+            <property name="_type" class="ptolemy.actor.TypeAttribute" value="string">
+            </property>
+        </port>
+    </entity>
+    <entity name="Ramp" class="ptolemy.actor.lib.Ramp">
+        <doc>Create a sequence of tokens with increasing value</doc>
+        <property name="_location" class="ptolemy.kernel.util.Location" value="[85.0, 90.0]">
+        </property>
+    </entity>
+    <entity name="Master" class="ptolemy.actor.lib.gui.Display">
+        <property name="_windowProperties" class="ptolemy.actor.gui.WindowPropertiesAttribute">
+        </property>
+        <property name="_paneSize" class="ptolemy.actor.gui.SizeAttribute">
+        </property>
+        <property name="_location" class="ptolemy.kernel.util.Location" value="[440.0, 90.0]">
+        </property>
+    </entity>
+    <relation name="relation" class="ptolemy.actor.TypedIORelation">
+        <property name="width" class="ptolemy.data.expr.Parameter" value="1">
+        </property>
+    </relation>
+    <relation name="relation2" class="ptolemy.actor.TypedIORelation">
+        <property name="width" class="ptolemy.data.expr.Parameter" value="1">
+        </property>
+    </relation>
+    <relation name="relation3" class="ptolemy.actor.TypedIORelation">
+        <property name="width" class="ptolemy.data.expr.Parameter" value="1">
+        </property>
+    </relation>
+    <link port="Clock.output" relation="relation2"/>
+    <link port="MasterFederateActor.input" relation="relation"/>
+    <link port="MasterFederateActor.output" relation="relation3"/>
+    <link port="Ramp.output" relation="relation"/>
+    <link port="Ramp.trigger" relation="relation2"/>
+    <link port="Master.input" relation="relation3"/>
+</entity>
