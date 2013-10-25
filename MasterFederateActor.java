@@ -116,6 +116,8 @@ public class MasterFederateActor extends TypedAtomicActor implements PtolemyFede
         
         // Create and configure the ports.
         input = new TypedIOPort(this, "input", true, false);
+        input2 = new TypedIOPort(this, "inputChannel2", true, false);
+        input3 = new TypedIOPort(this, "inputChannel3", true, false);
 
         output = new TypedIOPort(this, "output", false, true);
 //        TypeAttribute outputType = new TypeAttribute(output, "type");
@@ -176,7 +178,10 @@ public class MasterFederateActor extends TypedAtomicActor implements PtolemyFede
      *  of location and time information on the <i>output</i> port.
      */
     public TypedIOPort input;
+    public TypedIOPort input2;
+    public TypedIOPort input3;
 
+    
     /** Name of the input channel. This is a string that defaults to
      *  "InputChannel".
      */
@@ -250,7 +255,7 @@ public class MasterFederateActor extends TypedAtomicActor implements PtolemyFede
         
       //  System.out.println("MasterFederateActor - fire() at " + this.getDirector().getModelTime());
       //dados recebidos do slave
-        if(attributesToSend != null){
+    /*    if(attributesToSend != null){
         	
         	String string, time, pessoa;
 			try {						        
@@ -265,10 +270,10 @@ public class MasterFederateActor extends TypedAtomicActor implements PtolemyFede
 //	            	aux = 0;
 	            	
 	                
-	            	string = EncodingHelpers.decodeString(attributesToSend.getReceivedData().getValue(0));
+	            string = EncodingHelpers.decodeString(attributesToSend.getReceivedData().getValue(0));
 						       
 	            	
-					StringToken s = new StringToken(string);
+				StringToken s = new StringToken(string);
 	            						
 			//	output.send(0,s); //joga na saída do master - era exibido no display
 	            	
@@ -286,14 +291,14 @@ public class MasterFederateActor extends TypedAtomicActor implements PtolemyFede
 			}
         	
 			attributesToSend = null;
-        }
+        }*/
         
         //If there is anything in the input to send
         //angelo - estava comentado - novo modelo
         if (input.hasToken(0)) {
             Token inputValue = input.get(0);
-                                                
-            IntToken val = (IntToken)inputValue;
+                    
+            Token val =inputValue;
             StringToken value = StringToken.convert(val);
 
            double timeValue = getDirector().getModelTime().getDoubleValue();
@@ -310,7 +315,66 @@ public class MasterFederateActor extends TypedAtomicActor implements PtolemyFede
             	aux1 = 0;
 //            	System.out.println("master enviou");
             	
-            	this.setValue(new StringToken(value + " - " + value));
+            	this.setValue(new StringToken("channel1" + " - " + value));
+                this.setTime(timeValue);           
+                hasDataToSend = true;
+            }            
+          
+            output.send(0, value);
+            //System.out.println("MasterFederateActor - message sent: " + value.toString());
+        }else
+        
+        
+        if (input2.hasToken(0)) {
+            Token inputValue = input2.get(0);
+                    
+            Token val =inputValue;
+            StringToken value = StringToken.convert(val);
+
+           double timeValue = getDirector().getModelTime().getDoubleValue();
+            
+            Parameter finalTime = (Parameter)getAttribute("timeWindow");
+	        double finalT = Double.parseDouble(finalTime.getValueAsString());
+	 
+//	        System.out.println("--------------:"+finalT);
+            if(aux1 < finalT){
+//            	System.out.println("akiiii 11111 MF ENV");
+            	aux1++;
+            	hasDataToSend = false;
+            }else{    
+            	aux1 = 0;
+//            	System.out.println("master enviou");
+            	
+            	this.setValue(new StringToken("channel2" + " - " + value));
+                this.setTime(timeValue);           
+                hasDataToSend = true;
+            }            
+          
+            output.send(0, value);
+            //System.out.println("MasterFederateActor - message sent: " + value.toString());
+        }else
+        
+        if (input3.hasToken(0)) {
+            Token inputValue = input3.get(0);
+                    
+            Token val =inputValue;
+            StringToken value = StringToken.convert(val);
+
+           double timeValue = getDirector().getModelTime().getDoubleValue();
+            
+            Parameter finalTime = (Parameter)getAttribute("timeWindow");
+	        double finalT = Double.parseDouble(finalTime.getValueAsString());
+	 
+//	        System.out.println("--------------:"+finalT);
+            if(aux1 < finalT){
+//            	System.out.println("akiiii 11111 MF ENV");
+            	aux1++;
+            	hasDataToSend = false;
+            }else{    
+            	aux1 = 0;
+//            	System.out.println("master enviou");
+            	
+            	this.setValue(new StringToken("channel3" + " - " + value));
                 this.setTime(timeValue);           
                 hasDataToSend = true;
             }            
@@ -318,6 +382,7 @@ public class MasterFederateActor extends TypedAtomicActor implements PtolemyFede
             output.send(0, value);
             //System.out.println("MasterFederateActor - message sent: " + value.toString());
         }
+        
         //angelo - estava comentado - novo modelo
     }
 

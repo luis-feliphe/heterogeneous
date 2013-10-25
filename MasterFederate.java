@@ -443,16 +443,15 @@ public class MasterFederate extends SigarCommandBase implements PtolemyFederate 
 		// that we intend to publish this information
 
 		// get all the handle information for the attributes of ObjectRoot.A
-		
+
 		int classHandle = rtiamb.getObjectClassHandle("ObjectRoot.aes");
 		int aaHandle = rtiamb.getAttributeHandle("canal1", classHandle);
-        int abHandle    = rtiamb.getAttributeHandle( "canal2", classHandle );  
-        int acHandle    = rtiamb.getAttributeHandle( "canal3", classHandle );  
+		int abHandle = rtiamb.getAttributeHandle("canal2", classHandle);
+		int acHandle = rtiamb.getAttributeHandle("canal3", classHandle);
 
-        
-		//int classHandle = rtiamb.getObjectClassHandle("InteractionRoot.X");
-		//int aaHandle = rtiamb.getAttributeHandle("xa", classHandle);
-		
+		// int classHandle = rtiamb.getObjectClassHandle("InteractionRoot.X");
+		// int aaHandle = rtiamb.getAttributeHandle("xa", classHandle);
+
 		// package the information into a handle set
 		AttributeHandleSet attributes = RtiFactoryFactory.getRtiFactory()
 				.createAttributeHandleSet();
@@ -497,7 +496,7 @@ public class MasterFederate extends SigarCommandBase implements PtolemyFederate 
 	 */
 	private int registerObject() throws RTIexception {
 		int classHandle = rtiamb.getObjectClassHandle("ObjectRoot.aes");
-		//int classHandle = rtiamb.getObjectClassHandle("InteractionRoot.X");
+		// int classHandle = rtiamb.getObjectClassHandle("InteractionRoot.X");
 		return rtiamb.registerObjectInstance(classHandle);
 	}
 
@@ -523,21 +522,25 @@ public class MasterFederate extends SigarCommandBase implements PtolemyFederate 
 		// C++
 
 		String[] valores = data.split(" - ");
+		int classHandle = rtiamb.getObjectClass(objectHandle);
 
-        byte[] aaValue = EncodingHelpers.encodeString( "canal1:" + valores[0] );  
-        byte[] abValue = EncodingHelpers.encodeString( "canal2:" + valores[0] );  
-        byte[] acValue = EncodingHelpers.encodeString( "canal3:" + valores[0] );  
+		if (valores[0].equalsIgnoreCase("channel1")) {
+			byte[] aaValue = EncodingHelpers.encodeString("canal1:"
+					+ valores[1]);
+			int aaHandle = rtiamb.getAttributeHandle("canal1", classHandle);
+			attributes.add(aaHandle, aaValue);
+		} else if (valores[0].equalsIgnoreCase("channel2")) {
+			byte[] abValue = EncodingHelpers.encodeString("canal2:"
+					+ valores[1]);
+			int abHandle = rtiamb.getAttributeHandle("canal2", classHandle);
+			attributes.add(abHandle, abValue);
+		} else if (valores[0].equalsIgnoreCase("channel3")) {
+			byte[] acValue = EncodingHelpers.encodeString("canal3:"
+					+ valores[1]);
+			int acHandle = rtiamb.getAttributeHandle("canal3", classHandle);
+			attributes.add(acHandle, acValue);
+		}
 
-        int classHandle = rtiamb.getObjectClass( objectHandle );  
-        int aaHandle = rtiamb.getAttributeHandle( "canal1", classHandle );  
-        int abHandle = rtiamb.getAttributeHandle( "canal2", classHandle );  
-        int acHandle = rtiamb.getAttributeHandle( "canal3", classHandle );
-
-        attributes.add( aaHandle, aaValue );  
-        attributes.add( abHandle, abValue );  
-        attributes.add( acHandle, acValue );
-		
-		
 		// ////////////////////////
 		// do the actual update //
 		// ////////////////////////

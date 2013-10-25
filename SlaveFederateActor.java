@@ -294,6 +294,8 @@ public class SlaveFederateActor extends TypedAtomicActor implements PtolemyFeder
            // sendData();
             
             //System.out.println(" ### Data sent by SlaveFederateActor.fire() at " + timeValue + ": " + value);
+
+
         }
     }
 
