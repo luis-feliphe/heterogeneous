@@ -65,6 +65,7 @@ import com.sun.management.OperatingSystemMXBean;
  * Instance 11. Resign from Federation 12. Try to destroy the federation
  * (nofail)
  * 
+ * 
  * NOTE: Those items marked with (nofail) deal with situations where multiple
  * federates may be working in the federation. In this sitaution, the federate
  * will attempt to carry out the tasks defined, but it won't stop or exit if
@@ -180,6 +181,7 @@ public class SlaveFederate extends SigarCommandBase implements PtolemyFederate {
 		// //////////////////////////
 		joinFederation(federateName);
 
+		
 		// //////////////////////////////
 		// 4. announce the sync point //
 		// //////////////////////////////

@@ -206,14 +206,18 @@ public class SlaveFederateActor extends TypedAtomicActor implements PtolemyFeder
         if(attributesToSend != null){
         	
         	String s, s1, value;
+        	String [] v;
+        	
 			try {
 				
 				value = EncodingHelpers.decodeString(attributesToSend.getReceivedData().getValue(0));
-			       
-            	
-				StringToken svalue = new StringToken(value);
-				System.out.println("valor obtido = " + value);
-				output.send(0, svalue);
+			    v=  value.split(":");
+			    v[1] = v[1].replace("\"", "");
+				//StringToken svalue = new StringToken(value);
+			    IntToken it = new IntToken(v[1]);
+			//	StringToken svalue = new StringToken(v[1]);
+				//System.out.println("valor obtido = " + value);
+				output.send(0, it);
 				
 /*
  * 				
