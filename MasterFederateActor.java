@@ -29,13 +29,19 @@ package ptolemy.myactors.MaximumEntropy;
 
 import java.io.BufferedWriter;
 import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Queue;
 
 import org.hyperic.sigar.CpuPerc;
 import org.hyperic.sigar.Mem;
 import org.hyperic.sigar.Sigar;
 
+//import com.sun.xml.internal.bind.v2.schemagen.xmlschema.List;
+
 import hla.rti.ArrayIndexOutOfBounds;
 import hla.rti.jlc.EncodingHelpers;
+import ptolemy.actor.NoRoomException;
 import ptolemy.actor.TypeAttribute;
 import ptolemy.actor.TypedAtomicActor;
 import ptolemy.actor.TypedIOPort;
@@ -79,8 +85,9 @@ public class MasterFederateActor extends TypedAtomicActor implements PtolemyFede
 
 	//angelo - mudei
 	//private IntToken myValue;
-	private StringToken myValue;
+	//private StringToken myValue;
 
+	Queue <StringToken>myValue=  new  <StringToken>LinkedList() ;
 	
 	private double myTime;
 	
@@ -123,9 +130,10 @@ public class MasterFederateActor extends TypedAtomicActor implements PtolemyFede
 //        TypeAttribute outputType = new TypeAttribute(output, "type");
 //        outputType.setExpression("String");
         
-        myValue = new StringToken("");
+        
+        //Modificando
+        myValue.add( new StringToken(""));
         myTime = 0;
-
         
     }
 
@@ -144,19 +152,35 @@ public class MasterFederateActor extends TypedAtomicActor implements PtolemyFede
 	 * @return the myValue
 	 */
 	public StringToken getValue() {
-		return myValue;
+		// return myValue;
+		return myValue.peek();
 	}
 	
 	public StringToken getDataToSend() {
+//		hasDataToSend = false;
+//		return myValue;
 		hasDataToSend = false;
-		return myValue;
+		//StringToken out  = new StringToken(myValue.peek() + " - "+ "sem dados de canal");
+         //output.send(0, value);
+        /* try {
+			output.send(0, out);
+		} catch (NoRoomException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IllegalActionException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}*/
+		return myValue.poll();
+
 	}
 
 	/**
 	 * @param myValue the myValue to set
 	 */
 	public void setValue(StringToken myValue) {
-		this.myValue = myValue;
+		//this.myValue = myValue;
+		this.myValue.add(myValue);
 	}
 	
 	
@@ -295,18 +319,18 @@ public class MasterFederateActor extends TypedAtomicActor implements PtolemyFede
         
         //If there is anything in the input to send
         //angelo - estava comentado - novo modelo
-        if (input.hasToken(0)) {
+          if (input.hasToken(0)) {
             Token inputValue = input.get(0);
                     
             Token val =inputValue;
             StringToken value = StringToken.convert(val);
 
-           double timeValue = getDirector().getModelTime().getDoubleValue();
+            double timeValue = getDirector().getModelTime().getDoubleValue();
             
             Parameter finalTime = (Parameter)getAttribute("timeWindow");
 	        double finalT = Double.parseDouble(finalTime.getValueAsString());
 	 
-//	        System.out.println("--------------:"+finalT);
+/*//	        System.out.println("--------------:"+finalT);
             if(aux1 < finalT){
 //            	System.out.println("akiiii 11111 MF ENV");
             	aux1++;
@@ -315,12 +339,31 @@ public class MasterFederateActor extends TypedAtomicActor implements PtolemyFede
             	aux1 = 0;
 //            	System.out.println("master enviou");
             	
-            	this.setValue(new StringToken("channel1" + " - " + value));
+            	this.setValue(new StringToken("channel1" + " - " + value  +" - "+ getDirector().getModelTime().toString()));
                 this.setTime(timeValue);           
                 hasDataToSend = true;
+
+                StringToken out  = new StringToken("Valor adicionardo: "+ value);
+                output.send(0, out);
+
             }            
-          
-            output.send(0, value);
+ */           
+
+            
+        	this.setValue(new StringToken("channel1" + " - " + value  +" - "+ getDirector().getModelTime().toString()));
+            this.setTime(timeValue);           
+            hasDataToSend = true;
+
+            StringToken out  = new StringToken("Valor adicionardo: "+ value);
+            output.send(0, out);
+
+            
+            
+            //StringToken out  = new StringToken(value + " - "+ "canal1");
+            //StringToken out  = new StringToken("Valor adicionardo: "+ value);
+            //output.send(0, out);
+            //output.send(0, value);
+            
             //System.out.println("MasterFederateActor - message sent: " + value.toString());
         }else
         
@@ -331,7 +374,7 @@ public class MasterFederateActor extends TypedAtomicActor implements PtolemyFede
             Token val =inputValue;
             StringToken value = StringToken.convert(val);
 
-           double timeValue = getDirector().getModelTime().getDoubleValue();
+            double timeValue = getDirector().getModelTime().getDoubleValue();
             
             Parameter finalTime = (Parameter)getAttribute("timeWindow");
 	        double finalT = Double.parseDouble(finalTime.getValueAsString());
@@ -345,12 +388,16 @@ public class MasterFederateActor extends TypedAtomicActor implements PtolemyFede
             	aux1 = 0;
 //            	System.out.println("master enviou");
             	
-            	this.setValue(new StringToken("channel2" + " - " + value));
+            	this.setValue(new StringToken("channel2" + " - " + value +" - "+ getDirector().getModelTime().toString()));
                 this.setTime(timeValue);           
                 hasDataToSend = true;
             }            
-          
-            output.send(0, value);
+            StringToken out  = new StringToken(value + " - "+ "canal2");
+            //output.send(0, value);
+            //output.send(0, out);
+            //System.out.println("MasterFederateActor - message sent: " + value.toString());
+        
+//            output.send(0, value);
             //System.out.println("MasterFederateActor - message sent: " + value.toString());
         }else
         
@@ -374,12 +421,16 @@ public class MasterFederateActor extends TypedAtomicActor implements PtolemyFede
             	aux1 = 0;
 //            	System.out.println("master enviou");
             	
-            	this.setValue(new StringToken("channel3" + " - " + value));
+            	this.setValue(new StringToken("channel3" + " - " + value  +" - "+ getDirector().getModelTime().toString()));
                 this.setTime(timeValue);           
                 hasDataToSend = true;
             }            
-          
-            output.send(0, value);
+            StringToken out  = new StringToken(value + " - "+ "canal3");
+            //output.send(0, value);
+            //output.send(0, out);
+            //System.out.println("MasterFederateActor - message sent: " + value.toString());
+        
+//            output.send(0, value);
             //System.out.println("MasterFederateActor - message sent: " + value.toString());
         }
         

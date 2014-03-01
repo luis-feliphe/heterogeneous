@@ -27,6 +27,9 @@
  */
 package ptolemy.myactors.MaximumEntropy;
 
+import java.util.LinkedList;
+import java.util.Queue;
+
 import javax.swing.JOptionPane;
 
 import ptolemy.actor.TypedAtomicActor;
@@ -66,7 +69,8 @@ public class DataSeparator extends TypedAtomicActor {
 
 	private static final long serialVersionUID = 1L;
 
-	private StringToken myValue;
+	//private StringToken myValue;
+	Queue <StringToken>myValue=  new  <StringToken>LinkedList() ;
 	private double myTime;
 
 	/**
@@ -89,10 +93,10 @@ public class DataSeparator extends TypedAtomicActor {
 		// Create and configure the ports.
 		input = new TypedIOPort(this, "input", true, false);
 
-		outputImpar = new TypedIOPort(this, "outputImpar", false, true);
-		outputPar = new TypedIOPort(this, "outputPar", false, true);
-		outputPrimo = new TypedIOPort(this, "outputPrimo", false, true);
-		myValue = new StringToken("");
+		outputChannel1 = new TypedIOPort(this, "outputChannel1", false, true);
+		outputChannel2 = new TypedIOPort(this, "outputChannel2", false, true);
+		outputChannel3 = new TypedIOPort(this, "outputChannel3", false, true);
+		myValue.add(new StringToken(""));
 		myTime = 0;
 
 	}
@@ -104,7 +108,7 @@ public class DataSeparator extends TypedAtomicActor {
 	 * @return the myValue
 	 */
 	public StringToken getValue() {
-		return myValue;
+		return myValue.poll();
 	}
 
 	/**
@@ -112,7 +116,7 @@ public class DataSeparator extends TypedAtomicActor {
 	 *            the myValue to set
 	 */
 	public void setValue(StringToken myValue) {
-		this.myValue = myValue;
+		this.myValue.add( myValue);
 	}
 
 	/**
@@ -147,9 +151,9 @@ public class DataSeparator extends TypedAtomicActor {
 	 * <i>input</i> port. This has type {location={double}, time=double}, a
 	 * record token.
 	 */
-	public TypedIOPort outputPrimo;
-	public TypedIOPort outputPar;
-	public TypedIOPort outputImpar;
+	public TypedIOPort outputChannel3;
+	public TypedIOPort outputChannel2;
+	public TypedIOPort outputChannel1;
 
 	// private SlaveFederate rtiFederation;
 
@@ -161,6 +165,11 @@ public class DataSeparator extends TypedAtomicActor {
 	 * position and time of the last input on the <i>input</i> port. The value
 	 * of the input is ignored.
 	 */
+	
+	
+	private final int DATA_SIZE = 300;
+	private int countInteractions = 0;
+	
 	public void fire() throws IllegalActionException {
 		super.fire();
 
@@ -172,32 +181,23 @@ public class DataSeparator extends TypedAtomicActor {
 			Token inputValue = input.get(0);
 
 			IntToken val = (IntToken) inputValue;
-			int value = val.intValue();
+			//int value = val.intValue();
 			StringToken s =new StringToken (val.intValue()+"");// StringToken.convert(val);
 			// StringToken s = new StringToken(string);
 
-	
-	
+		
+			int faixa = DATA_SIZE/3;
 			
 			
-			if (value % 2 == 0) { // se é par
-				outputPar.send(0, s);
-			} else { // ou impar
-				outputImpar.send(0, s);
-
-			}
-
-			// se for primo
-			int cont = 0;
-			for (int i = 1; i <= value; i++) {
-				if (value % i==0){
-					cont++;
-				}
-				
-				
-			}
-			if (cont == 2) {
-				outputPrimo.send(0, s);
+			if (countInteractions <= faixa ) { 
+				outputChannel1.send(0, s);
+				countInteractions++;
+			} else if (countInteractions > faixa && countInteractions <= (faixa*2)) { 
+				outputChannel2.send(0, s);
+				countInteractions++;
+			}else{
+				outputChannel3.send(0, s);
+				countInteractions++;
 			}
 
 		}
