@@ -523,17 +523,27 @@ public class MasterFederate extends SigarCommandBase implements PtolemyFederate 
 
 		String[] valores = data.split(" - ");
 		int classHandle = rtiamb.getObjectClass(objectHandle);
-
+		
+		// testes -----------
+		System.out.println();
+		System.out.println("Valor bruto "+data);
+		System.out.println("valor de [0]" + valores[0]);
+		//------------------
+		
+		
+		
 		if (valores[0].equalsIgnoreCase("channel1")) {
 			byte[] aaValue = EncodingHelpers.encodeString("canal1:"
 					+ valores[1]);
 			int aaHandle = rtiamb.getAttributeHandle("canal1", classHandle);
 			attributes.add(aaHandle, aaValue);
+			System.out.println("Chegou no canal 1---------------");
 		} else if (valores[0].equalsIgnoreCase("channel2")) {
 			byte[] abValue = EncodingHelpers.encodeString("canal2:"
 					+ valores[1]);
 			int abHandle = rtiamb.getAttributeHandle("canal2", classHandle);
 			attributes.add(abHandle, abValue);
+			System.out.println("Chegou no canal 2 ---------------");
 		} else if (valores[0].equalsIgnoreCase("channel3")) {
 			byte[] acValue = EncodingHelpers.encodeString("canal3:"
 					+ valores[1]);

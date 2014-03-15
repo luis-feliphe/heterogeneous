@@ -94,6 +94,7 @@ public class DataSeparator extends TypedAtomicActor {
 		input = new TypedIOPort(this, "input", true, false);
 
 		outputChannel1 = new TypedIOPort(this, "outputChannel1", false, true);
+		outputChannel1.setMultiport(true);
 		outputChannel2 = new TypedIOPort(this, "outputChannel2", false, true);
 		outputChannel3 = new TypedIOPort(this, "outputChannel3", false, true);
 		myValue.add(new StringToken(""));
@@ -155,6 +156,7 @@ public class DataSeparator extends TypedAtomicActor {
 	public TypedIOPort outputChannel2;
 	public TypedIOPort outputChannel1;
 
+
 	// private SlaveFederate rtiFederation;
 
 	// /////////////////////////////////////////////////////////////////
@@ -192,11 +194,14 @@ public class DataSeparator extends TypedAtomicActor {
 			if (countInteractions <= faixa ) { 
 				outputChannel1.send(0, s);
 				countInteractions++;
-			} else if (countInteractions > faixa && countInteractions <= (faixa*2)) { 
-				outputChannel2.send(0, s);
+			} else if (countInteractions > faixa && countInteractions <= (faixa*2)) {
+				outputChannel1.send(1, s);
+				//outputChannel2.send(0, s);
 				countInteractions++;
 			}else{
-				outputChannel3.send(0, s);
+				outputChannel1.send(2, s);
+
+				//outputChannel3.send(0, s);
 				countInteractions++;
 			}
 

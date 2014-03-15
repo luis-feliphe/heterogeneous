@@ -446,7 +446,7 @@ public abstract class HLADEDirector extends Director implements TimedDirector {
 								}								
 
 							} catch (RTIexception e) {
-								System.out.println("testandoooo");
+								//System.out.println("testandoooo");
 								e.printStackTrace();
 							}
 						}else{
