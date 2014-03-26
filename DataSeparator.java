@@ -95,8 +95,6 @@ public class DataSeparator extends TypedAtomicActor {
 
 		outputChannel1 = new TypedIOPort(this, "outputChannel1", false, true);
 		outputChannel1.setMultiport(true);
-		outputChannel2 = new TypedIOPort(this, "outputChannel2", false, true);
-		outputChannel3 = new TypedIOPort(this, "outputChannel3", false, true);
 		myValue.add(new StringToken(""));
 		myTime = 0;
 
@@ -152,8 +150,6 @@ public class DataSeparator extends TypedAtomicActor {
 	 * <i>input</i> port. This has type {location={double}, time=double}, a
 	 * record token.
 	 */
-	public TypedIOPort outputChannel3;
-	public TypedIOPort outputChannel2;
 	public TypedIOPort outputChannel1;
 
 
@@ -196,12 +192,9 @@ public class DataSeparator extends TypedAtomicActor {
 				countInteractions++;
 			} else if (countInteractions > faixa && countInteractions <= (faixa*2)) {
 				outputChannel1.send(1, s);
-				//outputChannel2.send(0, s);
 				countInteractions++;
 			}else{
 				outputChannel1.send(2, s);
-
-				//outputChannel3.send(0, s);
 				countInteractions++;
 			}
 

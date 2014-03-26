@@ -127,8 +127,6 @@ public class MasterFederateActor extends TypedAtomicActor implements
 		// Create and configure the ports.
 		input = new TypedIOPort(this, "input", true, false);
 		input.setMultiport(true);
-		input2 = new TypedIOPort(this, "inputChannel2", true, false);
-		input3 = new TypedIOPort(this, "inputChannel3", true, false);
 
 		output = new TypedIOPort(this, "output", false, true);
 		// TypeAttribute outputType = new TypeAttribute(output, "type");
@@ -183,7 +181,6 @@ public class MasterFederateActor extends TypedAtomicActor implements
 		
 		/* mofidicação para retornar string contendo todos os dados da variavel myactors
 		 */ 
-		System.out.println("valor cabeça da pilha " + myValue.peek());
 		
 		String out = "";
 		for (StringToken valor: myValue ){
@@ -226,8 +223,7 @@ public class MasterFederateActor extends TypedAtomicActor implements
 	 * and time information on the <i>output</i> port.
 	 */
 	public TypedIOPort input;
-	public TypedIOPort input2;
-	public TypedIOPort input3;
+
 
 	/**
 	 * Name of the input channel. This is a string that defaults to

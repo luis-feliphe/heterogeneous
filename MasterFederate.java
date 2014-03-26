@@ -534,17 +534,15 @@ public class MasterFederate extends SigarCommandBase implements PtolemyFederate 
 			
 				
 			SuppliedAttributes attributes = RtiFactoryFactory.getRtiFactory().createSuppliedAttributes();
-			//removendo lixo das strings 
+			//Removing special characters 
 			token  = token.replace("\n", "");
 			token  = token.replace("\"", "");
 			token  = token.replace("\\", "");
-			// ---- 
 			
 			String[] valores = token.split(" - ");
 			
 			int classHandle = rtiamb.getObjectClass(objectHandle);
 			
-			System.out.println("Valor adicionado no Attributes => " + valores[1]);
 			
 			
 			if (valores[0].equalsIgnoreCase("channel1")) {
@@ -552,21 +550,26 @@ public class MasterFederate extends SigarCommandBase implements PtolemyFederate 
 				byte[] aaValue = EncodingHelpers.encodeString("canal1:"+ valores[1]);
 				int aaHandle = rtiamb.getAttributeHandle("canal1", classHandle);
 				attributes.add(aaHandle, aaValue);
-				System.out.println("adicionaou no channel 1");
+				System.out.println("Valor adicionado no Attributes => " + valores[1]);
 				
 			} else if (valores[0].equalsIgnoreCase("channel2")) {
 				
 				byte[] abValue = EncodingHelpers.encodeString("canal2:"+ valores[1]);
 				int abHandle = rtiamb.getAttributeHandle("canal2", classHandle);
 				attributes.add(abHandle, abValue);
-				System.out.println("adicionou no channel 2");
+				System.out.println("Valor adicionado no Attributes => " + valores[1]);
+
 				
 			} else if (valores[0].equalsIgnoreCase("channel3")) {
 				
 				byte[] acValue = EncodingHelpers.encodeString("canal3:"+ valores[1]);
 				int acHandle = rtiamb.getAttributeHandle("canal3", classHandle);
 				attributes.add(acHandle, acValue);
-				System.out.println("adicionou no channel 3");
+				System.out.println("Valor adicionado no Attributes => " + valores[1]);
+
+			}else {
+				System.out.println("O Valor não foi adicionado no Attributes => " + valores[1]);
+
 			}
 			byte[] tag = EncodingHelpers.encodeString("hi!");
 			rtiamb.updateAttributeValues(objectHandle, attributes, tag);
