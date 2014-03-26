@@ -514,22 +514,82 @@ public class MasterFederate extends SigarCommandBase implements PtolemyFederate 
 		// /////////////////////////////////////////////
 		// create the collection to store the values in, as you can see
 		// this is quite a lot of work
-		SuppliedAttributes attributes = RtiFactoryFactory.getRtiFactory()
-				.createSuppliedAttributes();
+		
+		//SuppliedAttributes attributes = RtiFactoryFactory.getRtiFactory().createSuppliedAttributes();
 
 		// generate the new values
 		// we use EncodingHelpers to make things nice friendly for both Java and
 		// C++
 
+		
+		
+		/*
+		 * Realizando modificações para adicionar mais de um token separado por ";"		 
+		*/
+		System.out.println("Ultimo valor Processado no master Federate => "+data);
+		
+		String[] tokens = data.split(" ; ");
+		
+		for (String token : tokens){
+			
+				
+			SuppliedAttributes attributes = RtiFactoryFactory.getRtiFactory().createSuppliedAttributes();
+			//removendo lixo das strings 
+			token  = token.replace("\n", "");
+			token  = token.replace("\"", "");
+			token  = token.replace("\\", "");
+			// ---- 
+			
+			String[] valores = token.split(" - ");
+			
+			int classHandle = rtiamb.getObjectClass(objectHandle);
+			
+			System.out.println("Valor adicionado no Attributes => " + valores[1]);
+			
+			
+			if (valores[0].equalsIgnoreCase("channel1")) {
+
+				byte[] aaValue = EncodingHelpers.encodeString("canal1:"+ valores[1]);
+				int aaHandle = rtiamb.getAttributeHandle("canal1", classHandle);
+				attributes.add(aaHandle, aaValue);
+				System.out.println("adicionaou no channel 1");
+				
+			} else if (valores[0].equalsIgnoreCase("channel2")) {
+				
+				byte[] abValue = EncodingHelpers.encodeString("canal2:"+ valores[1]);
+				int abHandle = rtiamb.getAttributeHandle("canal2", classHandle);
+				attributes.add(abHandle, abValue);
+				System.out.println("adicionou no channel 2");
+				
+			} else if (valores[0].equalsIgnoreCase("channel3")) {
+				
+				byte[] acValue = EncodingHelpers.encodeString("canal3:"+ valores[1]);
+				int acHandle = rtiamb.getAttributeHandle("canal3", classHandle);
+				attributes.add(acHandle, acValue);
+				System.out.println("adicionou no channel 3");
+			}
+			byte[] tag = EncodingHelpers.encodeString("hi!");
+			rtiamb.updateAttributeValues(objectHandle, attributes, tag);
+
+			// note that if you want to associate a particular timestamp with the
+			// update. here we send another update, this time with a timestamp:
+			CertiLogicalTime time = new CertiLogicalTime(fedamb.federateTime + fedamb.federateLookahead);
+			rtiamb.updateAttributeValues(objectHandle, attributes, tag, time);
+			
+		}
+				
+		
+		 /* Fim de modificação
+		 * 
+		 */
+		/*
+		
 		String[] valores = data.split(" - ");
+		 
 		int classHandle = rtiamb.getObjectClass(objectHandle);
 		
-		// testes -----------
-		System.out.println();
-		System.out.println("Valor bruto "+data);
-		System.out.println("valor de [0]" + valores[0]);
-		//------------------
-		
+		System.out.println("Ultimo valor Processado no master Federate => "+data);
+		// mofidicando dados para 
 		
 		
 		if (valores[0].equalsIgnoreCase("channel1")) {
@@ -537,13 +597,11 @@ public class MasterFederate extends SigarCommandBase implements PtolemyFederate 
 					+ valores[1]);
 			int aaHandle = rtiamb.getAttributeHandle("canal1", classHandle);
 			attributes.add(aaHandle, aaValue);
-			System.out.println("Chegou no canal 1---------------");
 		} else if (valores[0].equalsIgnoreCase("channel2")) {
 			byte[] abValue = EncodingHelpers.encodeString("canal2:"
 					+ valores[1]);
 			int abHandle = rtiamb.getAttributeHandle("canal2", classHandle);
 			attributes.add(abHandle, abValue);
-			System.out.println("Chegou no canal 2 ---------------");
 		} else if (valores[0].equalsIgnoreCase("channel3")) {
 			byte[] acValue = EncodingHelpers.encodeString("canal3:"
 					+ valores[1]);
@@ -562,6 +620,7 @@ public class MasterFederate extends SigarCommandBase implements PtolemyFederate 
 		CertiLogicalTime time = new CertiLogicalTime(fedamb.federateTime
 				+ fedamb.federateLookahead);
 		rtiamb.updateAttributeValues(objectHandle, attributes, tag, time);
+		*/
 	}
 
 	/**

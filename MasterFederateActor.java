@@ -135,7 +135,7 @@ public class MasterFederateActor extends TypedAtomicActor implements
 		// outputType.setExpression("String");
 
 		// Modificando
-		myValue.add(new StringToken(""));
+		//myValue.add(new StringToken(""));
 		myTime = 0;
 
 	}
@@ -178,7 +178,22 @@ public class MasterFederateActor extends TypedAtomicActor implements
 		 * (IllegalActionException e) { // TODO Auto-generated catch block
 		 * e.printStackTrace(); }
 		 */
-		return myValue.poll();
+		//return myValue.poll();
+		
+		
+		/* mofidicação para retornar string contendo todos os dados da variavel myactors
+		 */ 
+		System.out.println("valor cabeça da pilha " + myValue.peek());
+		
+		String out = "";
+		for (StringToken valor: myValue ){
+			out += valor + " ; ";
+		}
+		
+		myValue.clear();
+		return new StringToken (out);
+		
+		
 
 	}
 
@@ -346,6 +361,7 @@ public class MasterFederateActor extends TypedAtomicActor implements
 		int width = input.getWidth();
 		for (int i = 0; i < width; i++) {
 			if (input.hasToken(i)) {
+				// Otimiza, remove o inputValue
 				Token inputValue = input.get(i);
 				Token val = inputValue;
 				StringToken value = StringToken.convert(val);
@@ -362,7 +378,7 @@ public class MasterFederateActor extends TypedAtomicActor implements
 				System.out.println("-> channel" + (i + 1) + " - "+ value);
 				this.setTime(timeValue);
 				hasDataToSend = true;
-
+				System.out.println("ultimo valor adicionado foi: " + value);
 				//StringToken out = new StringToken("Valor adicionado: "+ "channel" + (i + 1) + " - " + value + " - "+ getDirector().getModelTime().toString());
 				//output.send(0, out);
 

@@ -125,7 +125,7 @@ public class SlaveFederate extends SigarCommandBase implements PtolemyFederate {
 	
 
 	private static String federateName = "ReadyToRun";
-	private static int slaveChannel = 2;
+	private static int slaveChannel = 3;
 
 
 	// ----------------------------------------------------------
