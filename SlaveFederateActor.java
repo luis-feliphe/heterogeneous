@@ -214,42 +214,9 @@ public class SlaveFederateActor extends TypedAtomicActor implements PtolemyFeder
 				System.out.println("Dado recebido: " + value);
 			    v=  value.split(":");
 			    v[1] = v[1].replace("\"", "");
-				//StringToken svalue = new StringToken(value);
 			    IntToken it = new IntToken(v[1]);
-			//	StringToken svalue = new StringToken(v[1]);
-			    
-				//System.out.println("valor obtido = " + value);
 				output.send(0, it);
 				
-/*
- * 				
-				Parameter finalTime = (Parameter)getAttribute("timeWindow");
-        double finalT = Double.parseDouble(finalTime.getValueAsString());
-//	System.out.println("chegou perto o slave ... ");								            
-//				System.out.println("--------------:"+finalT);
-//	            if(aux < finalT){
-//	            	System.out.println("akiiii 11111 SL REC");
-//	            	aux++;
-//	            }else{    
-//	            	aux = 0;
-//	            	System.out.println("akiiii 2222222222 SL REC");
-	            	
-	            	s = EncodingHelpers.decodeString(attributesToSend.getReceivedData().getValue(0));
-					//s1 = EncodingHelpers.decodeString(attributesToSend.getReceivedData().getValue(1));
-					
-					String separated[] = s.split(":");
-					separated[1] = separated[1].replace("\""," ");
-					float d = Float.parseFloat(separated[1]);
-					
-					IntToken value = new IntToken((int)d);
-					
-	*/				
-					//
-//	            }
-				
-//				syso
-//	            System.out.println(" ### Data received by SlaveFederateActor.fire() at " + this.getDirector().getModelTime() + ": " + value);
-	            
 	            
 			} catch (ArrayIndexOutOfBounds e) {
 				// TODO Auto-generated catch block
@@ -261,47 +228,28 @@ public class SlaveFederateActor extends TypedAtomicActor implements PtolemyFeder
         }//angelo - estava comentado - novo modelo
         
         if (input.hasToken(0)) {
-//        	getDirector().getModelTime().add(1.0);
         	
             Token inputValue = input.get(0);
-                                    
-//            IntMatrixToken t = (IntMatrixToken)inputValue;
-//            int x = t.getElementAt(0, 0);
-//            int y = t.getElementAt(0, 1);
-            
+                                                
             StringToken t = (StringToken) StringToken.convert(inputValue);// fazendo gambis
             StringToken string = StringToken.convert(t);
-            
-//            RecordToken t = (RecordToken)inputValue;
-//            double time = ((DoubleToken) t.get("time")).doubleValue();
-//            String pessoa = ((StringToken) t.get("pessoa")).stringValue();
-//            int idSensor = ((IntToken) t.get("idSensorCentral")).intValue();
-            
             double timeValue = getDirector().getModelTime().getDoubleValue();
             
             Parameter finalTime = (Parameter)getAttribute("timeWindow");
-	        double finalT = 1.0 ;//Double.parseDouble(finalTime.getValueAsString());
+	        double finalT = 1.0 ;
 								            
-//			System.out.println("--------------:"+finalT);
+
             if(aux1 < finalT){
-//            	System.out.println("akiiii 11111 SL ENV");
             	aux1++;
             	hasDataToSend = false;
             }else{          
             	aux1 = 0;
-//            	System.out.println("slave enviou");            	
             	this.setValue(new StringToken(""+string));
-            	//System.out.println(" - " + string);
-            	                
+
                 this.setTime(timeValue);
                 hasDataToSend = true;                
             }
             
-           // sendData();
-            
-            //System.out.println(" ### Data sent by SlaveFederateActor.fire() at " + timeValue + ": " + value);
-
-
         }
     }
 

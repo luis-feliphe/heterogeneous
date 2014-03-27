@@ -520,12 +520,7 @@ public class MasterFederate extends SigarCommandBase implements PtolemyFederate 
 		// generate the new values
 		// we use EncodingHelpers to make things nice friendly for both Java and
 		// C++
-
 		
-		
-		/*
-		 * Realizando modificações para adicionar mais de um token separado por ";"		 
-		*/
 		System.out.println("Ultimo valor Processado no master Federate => "+data);
 		
 		String[] tokens = data.split(" ; ");
@@ -570,58 +565,12 @@ public class MasterFederate extends SigarCommandBase implements PtolemyFederate 
 			
 			byte[] tag = EncodingHelpers.encodeString("hi!");
 			rtiamb.updateAttributeValues(objectHandle, attributes, tag);
-
-			// note that if you want to associate a particular timestamp with the
-			// update. here we send another update, this time with a timestamp:
 			CertiLogicalTime time = new CertiLogicalTime(fedamb.federateTime + fedamb.federateLookahead);
-			//rtiamb.updateAttributeValues(objectHandle, attributes, tag, time);
 			System.out.println("Valor adicionado no Attributes => " + valores[1]);
 			
 		}
 				
-		
-		 /* Fim de modificação
-		 * 
-		 */
-		/*
-		
-		String[] valores = data.split(" - ");
-		 
-		int classHandle = rtiamb.getObjectClass(objectHandle);
-		
-		System.out.println("Ultimo valor Processado no master Federate => "+data);
-		// mofidicando dados para 
-		
-		
-		if (valores[0].equalsIgnoreCase("channel1")) {
-			byte[] aaValue = EncodingHelpers.encodeString("canal1:"
-					+ valores[1]);
-			int aaHandle = rtiamb.getAttributeHandle("canal1", classHandle);
-			attributes.add(aaHandle, aaValue);
-		} else if (valores[0].equalsIgnoreCase("channel2")) {
-			byte[] abValue = EncodingHelpers.encodeString("canal2:"
-					+ valores[1]);
-			int abHandle = rtiamb.getAttributeHandle("canal2", classHandle);
-			attributes.add(abHandle, abValue);
-		} else if (valores[0].equalsIgnoreCase("channel3")) {
-			byte[] acValue = EncodingHelpers.encodeString("canal3:"
-					+ valores[1]);
-			int acHandle = rtiamb.getAttributeHandle("canal3", classHandle);
-			attributes.add(acHandle, acValue);
-		}
 
-		// ////////////////////////
-		// do the actual update //
-		// ////////////////////////
-		byte[] tag = EncodingHelpers.encodeString("hi!");
-		rtiamb.updateAttributeValues(objectHandle, attributes, tag);
-
-		// note that if you want to associate a particular timestamp with the
-		// update. here we send another update, this time with a timestamp:
-		CertiLogicalTime time = new CertiLogicalTime(fedamb.federateTime
-				+ fedamb.federateLookahead);
-		rtiamb.updateAttributeValues(objectHandle, attributes, tag, time);
-		*/
 	}
 
 	/**

@@ -163,24 +163,8 @@ public class MasterFederateActor extends TypedAtomicActor implements
 	}
 
 	public StringToken getDataToSend() {
-		// hasDataToSend = false;
-		// return myValue;
 
 		hasDataToSend = false;
-		// StringToken out = new StringToken(myValue.peek() + " - "+
-		// "sem dados de canal");
-		// output.send(0, value);
-		/*
-		 * try { output.send(0, out); } catch (NoRoomException e) { // TODO
-		 * Auto-generated catch block e.printStackTrace(); } catch
-		 * (IllegalActionException e) { // TODO Auto-generated catch block
-		 * e.printStackTrace(); }
-		 */
-		//return myValue.poll();
-		
-		
-		/* mofidicação para retornar string contendo todos os dados da variavel myactors
-		 */ 
 		
 		String out = "";
 		for (StringToken valor: myValue ){
@@ -309,50 +293,6 @@ public class MasterFederateActor extends TypedAtomicActor implements
 	public void fire() throws IllegalActionException {
 		super.fire();
 
-		// System.out.println("MasterFederateActor - fire() at " +
-		// this.getDirector().getModelTime());
-		// dados recebidos do slave
-		/*
-		 * if(attributesToSend != null){
-		 * 
-		 * String string, time, pessoa; try { // Parameter finalTime =
-		 * (Parameter)getAttribute("timeWindow"); // double finalT =
-		 * Double.parseDouble(finalTime.getValueAsString());
-		 * 
-		 * // System.out.println("--------------:"+finalT); // if(aux < finalT){
-		 * // System.out.println("akiiii 11111 MF REC"); // aux++; // }else{ //
-		 * aux = 0;
-		 * 
-		 * 
-		 * string =
-		 * EncodingHelpers.decodeString(attributesToSend.getReceivedData
-		 * ().getValue(0));
-		 * 
-		 * 
-		 * StringToken s = new StringToken(string);
-		 * 
-		 * // output.send(0,s); //joga na saída do master - era exibido no
-		 * display
-		 * 
-		 * // } // System.out.println(idSensor + " - " + time + " - " + pessoa +
-		 * " - "+capturarEstatisticas());
-		 * 
-		 * //System.out.println(string ); //syso //
-		 * System.out.println("Data received by MasterFederateActor.fire() at "
-		 * + this.getDirector().getModelTime() + ": " // + idSensor + " - " +
-		 * time + " - " + pessoa);
-		 * 
-		 * } catch (Exception e) { // TODO Auto-generated catch block
-		 * e.printStackTrace(); }
-		 * 
-		 * attributesToSend = null; }
-		 */
-
-		// If there is anything in the input to send
-		// angelo - estava comentado - novo modelo
-
-		// / ----------------------------------- Comentario Master começa aqui
-		// -------------------------------------\\\
 
 		int width = input.getWidth();
 		for (int i = 0; i < width; i++) {
@@ -382,89 +322,6 @@ public class MasterFederateActor extends TypedAtomicActor implements
 
 	}
 
-	/*
-	 * if (input.hasToken(0)) { Token inputValue = input.get(0);
-	 * 
-	 * Token val =inputValue; StringToken value = StringToken.convert(val);
-	 * 
-	 * double timeValue = getDirector().getModelTime().getDoubleValue();
-	 * 
-	 * Parameter finalTime = (Parameter)getAttribute("timeWindow"); double
-	 * finalT = Double.parseDouble(finalTime.getValueAsString());
-	 * 
-	 * 
-	 * this.setValue(new StringToken("channel1" + " - " + value +" - "+
-	 * getDirector().getModelTime().toString())); this.setTime(timeValue);
-	 * hasDataToSend = true;
-	 * 
-	 * StringToken out = new StringToken("Valor adicionardo: "+ value);
-	 * output.send(0, out);
-	 * 
-	 * 
-	 * 
-	 * }else
-	 * 
-	 * 
-	 * if (input2.hasToken(0)) { Token inputValue = input2.get(0);
-	 * 
-	 * Token val =inputValue; StringToken value = StringToken.convert(val);
-	 * 
-	 * double timeValue = getDirector().getModelTime().getDoubleValue();
-	 * 
-	 * Parameter finalTime = (Parameter)getAttribute("timeWindow"); double
-	 * finalT = Double.parseDouble(finalTime.getValueAsString());
-	 * 
-	 * // System.out.println("--------------:"+finalT); if(aux1 < finalT){ //
-	 * System.out.println("akiiii 11111 MF ENV"); aux1++; hasDataToSend = false;
-	 * }else{ aux1 = 0; // System.out.println("master enviou");
-	 * 
-	 * this.setValue(new StringToken("channel2" + " - " + value +" - "+
-	 * getDirector().getModelTime().toString())); this.setTime(timeValue);
-	 * hasDataToSend = true; } StringToken out = new StringToken(value + " - "+
-	 * "canal2"); //output.send(0, value); //output.send(0, out);
-	 * //System.out.println("MasterFederateActor - message sent: " +
-	 * value.toString());
-	 * 
-	 * // output.send(0, value);
-	 * //System.out.println("MasterFederateActor - message sent: " +
-	 * value.toString()); }else
-	 * 
-	 * if (input3.hasToken(0)) { Token inputValue = input3.get(0);
-	 * 
-	 * Token val =inputValue; StringToken value = StringToken.convert(val);
-	 * 
-	 * double timeValue = getDirector().getModelTime().getDoubleValue();
-	 * 
-	 * Parameter finalTime = (Parameter)getAttribute("timeWindow"); double
-	 * finalT = Double.parseDouble(finalTime.getValueAsString());
-	 * 
-	 * // System.out.println("--------------:"+finalT); if(aux1 < finalT){ //
-	 * System.out.println("akiiii 11111 MF ENV"); aux1++; hasDataToSend = false;
-	 * }else{ aux1 = 0; // System.out.println("master enviou");
-	 * 
-	 * this.setValue(new StringToken("channel3" + " - " + value +" - "+
-	 * getDirector().getModelTime().toString())); this.setTime(timeValue);
-	 * hasDataToSend = true; } StringToken out = new StringToken(value + " - "+
-	 * "canal3"); //output.send(0, value); //output.send(0, out);
-	 * //System.out.println("MasterFederateActor - message sent: " +
-	 * value.toString());
-	 * 
-	 * // output.send(0, value);
-	 * //System.out.println("MasterFederateActor - message sent: " +
-	 * value.toString());
-	 * 
-	 * 
-	 * 
-	 * 
-	 * }
-	 */
-	// / -------------------------------------- termina aqui
-	// -------------------------------------------\\\
-
-	// angelo - estava comentado - novo modelo
-
-	// /////////////////////////////////////////////////////////////////
-	// // protected methods ////
 
 	/**
 	 * Return the location of this sensor. In this base class, this is
