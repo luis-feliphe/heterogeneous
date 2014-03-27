@@ -38,6 +38,7 @@ import ptolemy.actor.TypedIOPort;
 import ptolemy.data.StringToken;
 import ptolemy.data.IntToken;
 import ptolemy.data.Token;
+import ptolemy.data.expr.Parameter;
 
 import ptolemy.kernel.CompositeEntity;
 import ptolemy.kernel.util.IllegalActionException;
@@ -185,7 +186,8 @@ public class DataSeparator extends TypedAtomicActor {
 
 		
 			int faixa = DATA_SIZE/3;
-			
+            //Parameter finalTime = (Parameter)getAttribute("timeWindow");
+
 			
 			if (countInteractions <= faixa ) { 
 				outputChannel1.send(0, s);

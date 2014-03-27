@@ -421,7 +421,7 @@ public abstract class HLADEDirector extends Director implements TimedDirector {
 							fedActor.fire();
 							try {
 
-								if(aux > 1){
+								//if(aux > 1){
 									if(fedActor.hasDataToSend()){										
 										this.rtiFederation.sendData(fedActor.getDataToSend().stringValue());
 
@@ -441,9 +441,9 @@ public abstract class HLADEDirector extends Director implements TimedDirector {
 									if(certiTime < nextTime)
 										this.fireAt((Actor)fedActor, new Time(this, certiTime));
 										//this.rtiFederation.advanceTimeTo(nextTime);
-								}else{
-									aux++;
-								}								
+								//}else{
+								//	aux++;
+								//}								
 
 							} catch (RTIexception e) {
 								//System.out.println("testandoooo");

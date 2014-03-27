@@ -291,7 +291,7 @@ public class SlaveFederateActor extends TypedAtomicActor implements PtolemyFeder
             	aux1 = 0;
 //            	System.out.println("slave enviou");            	
             	this.setValue(new StringToken(""+string));
-            	System.out.println(" - " + string);
+            	//System.out.println(" - " + string);
             	                
                 this.setTime(timeValue);
                 hasDataToSend = true;                

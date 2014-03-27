@@ -524,6 +524,12 @@ public class SlaveFederate extends SigarCommandBase implements PtolemyFederate {
 	 * could update them individually, in groups or not at all!
 	 */
 	private void updateAttributeValues(String data) throws RTIexception {
+		/*
+		 * This part of code are comented cause Slave do not send data, but afoter this can change  
+		 */
+		
+		
+		/*
 		// /////////////////////////////////////////////
 		// create the necessary container and values //
 		// /////////////////////////////////////////////
@@ -559,6 +565,7 @@ public class SlaveFederate extends SigarCommandBase implements PtolemyFederate {
 		CertiLogicalTime time = new CertiLogicalTime(fedamb.federateTime
 				+ fedamb.federateLookahead);
 		rtiamb.updateAttributeValues(objectHandle, attributes, tag, time);
+		*/
 	}
 
 	/**

@@ -542,42 +542,40 @@ public class MasterFederate extends SigarCommandBase implements PtolemyFederate 
 			String[] valores = token.split(" - ");
 			
 			int classHandle = rtiamb.getObjectClass(objectHandle);
-			
-			
-			
+
+
+
 			if (valores[0].equalsIgnoreCase("channel1")) {
 
 				byte[] aaValue = EncodingHelpers.encodeString("canal1:"+ valores[1]);
 				int aaHandle = rtiamb.getAttributeHandle("canal1", classHandle);
 				attributes.add(aaHandle, aaValue);
-				System.out.println("Valor adicionado no Attributes => " + valores[1]);
 				
 			} else if (valores[0].equalsIgnoreCase("channel2")) {
 				
 				byte[] abValue = EncodingHelpers.encodeString("canal2:"+ valores[1]);
 				int abHandle = rtiamb.getAttributeHandle("canal2", classHandle);
 				attributes.add(abHandle, abValue);
-				System.out.println("Valor adicionado no Attributes => " + valores[1]);
-
 				
 			} else if (valores[0].equalsIgnoreCase("channel3")) {
 				
 				byte[] acValue = EncodingHelpers.encodeString("canal3:"+ valores[1]);
 				int acHandle = rtiamb.getAttributeHandle("canal3", classHandle);
 				attributes.add(acHandle, acValue);
-				System.out.println("Valor adicionado no Attributes => " + valores[1]);
 
 			}else {
 				System.out.println("O Valor não foi adicionado no Attributes => " + valores[1]);
 
 			}
+			
 			byte[] tag = EncodingHelpers.encodeString("hi!");
 			rtiamb.updateAttributeValues(objectHandle, attributes, tag);
 
 			// note that if you want to associate a particular timestamp with the
 			// update. here we send another update, this time with a timestamp:
 			CertiLogicalTime time = new CertiLogicalTime(fedamb.federateTime + fedamb.federateLookahead);
-			rtiamb.updateAttributeValues(objectHandle, attributes, tag, time);
+			//rtiamb.updateAttributeValues(objectHandle, attributes, tag, time);
+			System.out.println("Valor adicionado no Attributes => " + valores[1]);
 			
 		}
 				
