@@ -311,7 +311,7 @@ public class MasterFederateActor extends TypedAtomicActor implements
 				this.setValue(new StringToken("channel" + (i + 1) + " - "+ value + " - "
 						+ getDirector().getModelTime().toString()));
 				
-				System.out.println("-> channel" + (i + 1) + " - "+ value + " no tempo " + timeValue);
+				//System.out.println("-> channel" + (i + 1) + " - "+ value + " no tempo " + timeValue);
 				this.setTime(timeValue);
 				hasDataToSend = true;
 				//StringToken out = new StringToken("Valor adicionado: "+ "channel" + (i + 1) + " - " + value + " - "+ getDirector().getModelTime().toString());
@@ -369,6 +369,7 @@ public class MasterFederateActor extends TypedAtomicActor implements
 		super.terminate();
 	}
 
+	
 	public void addInteractionToSend(Interaction inter) {
 		// System.out.println("Data received by MasterFederateActor " +
 		// inter.getReceivedData() + " at "+ inter.getReceivedTime());

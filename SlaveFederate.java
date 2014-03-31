@@ -125,7 +125,7 @@ public class SlaveFederate extends SigarCommandBase implements PtolemyFederate {
 	
 
 	private static String federateName = "ReadyToRun";
-	private static int slaveChannel = 3;
+	private static int slaveChannel = 1;
 
 
 	// ----------------------------------------------------------
@@ -684,6 +684,7 @@ public class SlaveFederate extends SigarCommandBase implements PtolemyFederate {
 		return this.objectHandle;
 	}
 
+	
 	@Override
 	public double getRTINextTime() {
 		// TODO Auto-generated method stub

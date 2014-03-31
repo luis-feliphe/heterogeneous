@@ -2,6 +2,7 @@ package ptolemy.myactors.MaximumEntropy.domain;
 
 import hla.rti.ArrayIndexOutOfBounds;
 import hla.rti.RTIexception;
+import hla.rti.jlc.EncodingHelpers;
 
 import java.util.HashSet;
 import java.util.Hashtable;
@@ -46,8 +47,7 @@ import ptolemy.myactors.MaximumEntropy.PtolemyFederateActor;
 import ptolemy.myactors.MaximumEntropy.SlaveFederate;
 
 public abstract class HLADEDirector extends Director implements TimedDirector {
-	
-	
+
 	/**
 	 * 
 	 */
@@ -56,39 +56,48 @@ public abstract class HLADEDirector extends Director implements TimedDirector {
 	protected PtolemyFederate rtiFederation;
 
 	public StringParameter federateName;
-	
+
 	public StringParameter federateFile;
-	
-	/** Construct a director in the default workspace with an empty string
-	 *  as its name. The director is added to the list of objects in
-	 *  the workspace. Increment the version number of the workspace.
+
+	/**
+	 * Construct a director in the default workspace with an empty string as its
+	 * name. The director is added to the list of objects in the workspace.
+	 * Increment the version number of the workspace.
 	 */
 	public HLADEDirector() {
 		super();
 		_initParameters();
 	}
 
-	/** Construct a director in the workspace with an empty name.
-	 *  The director is added to the list of objects in the workspace.
-	 *  Increment the version number of the workspace.
-	 *  @param workspace The workspace of this object.
+	/**
+	 * Construct a director in the workspace with an empty name. The director is
+	 * added to the list of objects in the workspace. Increment the version
+	 * number of the workspace.
+	 * 
+	 * @param workspace
+	 *            The workspace of this object.
 	 */
 	public HLADEDirector(Workspace workspace) {
 		super(workspace);
 		_initParameters();
 	}
 
-	/** Construct a director in the given container with the given name.
-	 *  The container argument must not be null, or a
-	 *  NullPointerException will be thrown.
-	 *  If the name argument is null, then the name is set to the
-	 *  empty string. Increment the version number of the workspace.
-	 *  @param container Container of the director.
-	 *  @param name Name of this director.
-	 *  @exception IllegalActionException If the
-	 *   director is not compatible with the specified container.
-	 *  @exception NameDuplicationException If the container not a
-	 *   CompositeActor and the name collides with an entity in the container.
+	/**
+	 * Construct a director in the given container with the given name. The
+	 * container argument must not be null, or a NullPointerException will be
+	 * thrown. If the name argument is null, then the name is set to the empty
+	 * string. Increment the version number of the workspace.
+	 * 
+	 * @param container
+	 *            Container of the director.
+	 * @param name
+	 *            Name of this director.
+	 * @exception IllegalActionException
+	 *                If the director is not compatible with the specified
+	 *                container.
+	 * @exception NameDuplicationException
+	 *                If the container not a CompositeActor and the name
+	 *                collides with an entity in the container.
 	 */
 	public HLADEDirector(CompositeEntity container, String name)
 			throws IllegalActionException, NameDuplicationException {
@@ -96,68 +105,73 @@ public abstract class HLADEDirector extends Director implements TimedDirector {
 		_initParameters();
 	}
 
-	///////////////////////////////////////////////////////////////////
-	////                         parameters                        ////
+	// /////////////////////////////////////////////////////////////////
+	// // parameters ////
 
-	/** The factor when adjusting the bin number.
-	 *  This parameter must contain an IntToken.
-	 *  Changes to this parameter are ignored when the model is running.
-	 *  The value defaults to 2.
+	/**
+	 * The factor when adjusting the bin number. This parameter must contain an
+	 * IntToken. Changes to this parameter are ignored when the model is
+	 * running. The value defaults to 2.
 	 */
 	public Parameter binCountFactor;
 
-	/** Specify whether the calendar queue adjusts its bin number
-	 *  at run time. This parameter must contain a BooleanToken.
-	 *  If this parameter is true, the calendar queue will adapt
-	 *  its bin number with respect to the distribution of events.
-	 *  Changes to this parameter are ignored when the model is running.
-	 *  The value defaults to true.
+	/**
+	 * Specify whether the calendar queue adjusts its bin number at run time.
+	 * This parameter must contain a BooleanToken. If this parameter is true,
+	 * the calendar queue will adapt its bin number with respect to the
+	 * distribution of events. Changes to this parameter are ignored when the
+	 * model is running. The value defaults to true.
 	 */
 	public Parameter isCQAdaptive;
 
-	/** The minimum (initial) number of bins in the calendar queue.
-	 *  This parameter must contain an IntToken.
-	 *  Changes to this parameter are ignored when the model is running.
-	 *  The value defaults to 2.
+	/**
+	 * The minimum (initial) number of bins in the calendar queue. This
+	 * parameter must contain an IntToken. Changes to this parameter are ignored
+	 * when the model is running. The value defaults to 2.
 	 */
 	public Parameter minBinCount;
 
-	/** The start time of model. This parameter must contain a
-	 *  DoubleToken.  The value defaults to 0.0.
+	/**
+	 * The start time of model. This parameter must contain a DoubleToken. The
+	 * value defaults to 0.0.
 	 */
 	public Parameter startTime;
 
-	/** The stop time of the model.  This parameter must contain a
-	 *  DoubleToken. The value defaults to Infinity.
+	/**
+	 * The stop time of the model. This parameter must contain a DoubleToken.
+	 * The value defaults to Infinity.
 	 */
 	public Parameter stopTime;
 
-	/** Specify whether the execution stops when the queue is empty.
-	 *  This parameter must contain a
-	 *  BooleanToken. If this parameter is true, the
-	 *  execution of the model will be stopped when the queue is empty.
-	 *  The value defaults to true.
+	/**
+	 * Specify whether the execution stops when the queue is empty. This
+	 * parameter must contain a BooleanToken. If this parameter is true, the
+	 * execution of the model will be stopped when the queue is empty. The value
+	 * defaults to true.
 	 */
 	public Parameter stopWhenQueueIsEmpty;
 
-	/** Specify whether the execution should synchronize to the
-	 *  real time. This parameter must contain a BooleanToken.
-	 *  If this parameter is true, then do not process events until the
-	 *  elapsed real time matches the time stamp of the events.
-	 *  The value defaults to false.
+	/**
+	 * Specify whether the execution should synchronize to the real time. This
+	 * parameter must contain a BooleanToken. If this parameter is true, then do
+	 * not process events until the elapsed real time matches the time stamp of
+	 * the events. The value defaults to false.
 	 */
 	public Parameter synchronizeToRealTime;
 
 	private int iteractions = 0;
 
-	///////////////////////////////////////////////////////////////////
-	////                         public methods                    ////
+	// /////////////////////////////////////////////////////////////////
+	// // public methods ////
 
-	/** Append the specified listener to the current set of debug listeners.
-	 *  If an event queue has been created, register the listener to that queue.
-	 *  @param listener The listener to be added to the list of listeners
-	 *  to which debug messages are sent.
-	 *  @see #removeDebugListener(DebugListener)
+	/**
+	 * Append the specified listener to the current set of debug listeners. If
+	 * an event queue has been created, register the listener to that queue.
+	 * 
+	 * @param listener
+	 *            The listener to be added to the list of listeners to which
+	 *            debug messages are sent.
+	 * @see #removeDebugListener(DebugListener)
 	 */
 	public void addDebugListener(DebugListener listener) {
 		if (_eventQueue != null) {
@@ -167,17 +181,21 @@ public abstract class HLADEDirector extends Director implements TimedDirector {
 		super.addDebugListener(listener);
 	}
 
-	/** Update the director parameters when attributes are changed.
-	 *  Changes to <i>isCQAdaptive</i>, <i>minBinCount</i>, and
-	 *  <i>binCountFactor</i> parameters will only be effective on
-	 *  the next time when the model is executed.
-	 *  @param attribute The changed parameter.
-	 *  @exception IllegalActionException If the parameter set is not valid.
-	 *  Not thrown in this class.
+	/**
+	 * Update the director parameters when attributes are changed. Changes to
+	 * <i>isCQAdaptive</i>, <i>minBinCount</i>, and <i>binCountFactor</i>
+	 * parameters will only be effective on the next time when the model is
+	 * executed.
+	 * 
+	 * @param attribute
+	 *            The changed parameter.
+	 * @exception IllegalActionException
+	 *                If the parameter set is not valid. Not thrown in this
+	 *                class.
 	 */
 	public void attributeChanged(Attribute attribute)
 			throws IllegalActionException {
-		
+
 		if (attribute == startTime) {
 			double startTimeValue = ((DoubleToken) startTime.getToken())
 					.doubleValue();
@@ -197,28 +215,33 @@ public abstract class HLADEDirector extends Director implements TimedDirector {
 		}
 	}
 
-	/** <p>Advance the current model tag to that of the earliest event in
-	 *  the event queue, and fire all actors that have requested or
-	 *  are triggered to be fired at the current tag. If
-	 *  <i>synchronizeToRealTime</i> is true, then before firing, wait
-	 *  until real time matches or exceeds the timestamp of the
-	 *  event. Note that the default unit for time is seconds.
-	 *  </p><p>
-	 *  Each actor is iterated repeatedly (prefire(), fire(), postfire()),
-	 *  until either it has no more input tokens, or its prefire() method
-	 *  returns false.
-	 *  </p><p>
-	 *  If there are no events in the event queue, then the behavior
-	 *  depends on the <i>stopWhenQueueIsEmpty</i> parameter. If it is
-	 *  false, then this thread will stall until events become
-	 *  available in the event queue. Otherwise, time will advance to
-	 *  the stop time and the execution will halt.</p>
-	 *
-	 *  @exception IllegalActionException If the firing actor throws it, or
-	 *  event queue is not ready, or an event is missed, or time is set
-	 *  backwards.
+	/**
+	 * <p>
+	 * Advance the current model tag to that of the earliest event in the event
+	 * queue, and fire all actors that have requested or are triggered to be
+	 * fired at the current tag. If <i>synchronizeToRealTime</i> is true, then
+	 * before firing, wait until real time matches or exceeds the timestamp of
+	 * the event. Note that the default unit for time is seconds.
+	 * </p>
+	 * <p>
+	 * Each actor is iterated repeatedly (prefire(), fire(), postfire()), until
+	 * either it has no more input tokens, or its prefire() method returns
+	 * false.
+	 * </p>
+	 * <p>
+	 * If there are no events in the event queue, then the behavior depends on
+	 * the <i>stopWhenQueueIsEmpty</i> parameter. If it is false, then this
+	 * thread will stall until events become available in the event queue.
+	 * Otherwise, time will advance to the stop time and the execution will
+	 * halt.
+	 * </p>
+	 * 
+	 * @exception IllegalActionException
+	 *                If the firing actor throws it, or event queue is not
+	 *                ready, or an event is missed, or time is set backwards.
 	 */
 	int aux = 0, aux1 = 0;
+
 	public void fire() throws IllegalActionException {
 		// NOTE: This fire method does not call super.fire()
 		// because this method is very different from that of the super class.
@@ -233,10 +256,9 @@ public abstract class HLADEDirector extends Director implements TimedDirector {
 			// can be null.
 			if (actorToFire == null) {
 
-
 				if (_isTopLevel()) {
 					// Case 1:
-						// If this director is an executive director at
+					// If this director is an executive director at
 					// the top level, a null actor means that there are
 					// no events in the event queue.
 					if (_debugging) {
@@ -268,7 +290,8 @@ public abstract class HLADEDirector extends Director implements TimedDirector {
 
 				// Nothing more needs to be done in the current iteration.
 				// Simply return.
-				// Since we are now actually stopping the firing, we can set this false.
+				// Since we are now actually stopping the firing, we can set
+				// this false.
 				_stopFireRequested = false;
 				return;
 			}
@@ -287,7 +310,8 @@ public abstract class HLADEDirector extends Director implements TimedDirector {
 			// FIXME: However, there may be more than one output port,
 			// should all the events be removed from the event queue?
 			if (actorToFire == getContainer()) {
-				// Since we are now actually stopping the firing, we can set this false.
+				// Since we are now actually stopping the firing, we can set
+				// this false.
 				_stopFireRequested = false;
 				return;
 			}
@@ -364,106 +388,110 @@ public abstract class HLADEDirector extends Director implements TimedDirector {
 						break;
 					}
 
-					
-//					Parameter time = (Parameter)getAttribute("timeWindow");
-//					String str = time.getValueAsString();
-//					int t = Integer.parseInt(str);
-//		            System.out.println("aaaaaaaaaaaaaaaaaaaa - "+t);
-		            
-		            Parameter name = (Parameter)getAttribute("federateName");
+					// Parameter time = (Parameter)getAttribute("timeWindow");
+					// String str = time.getValueAsString();
+					// int t = Integer.parseInt(str);
+					// System.out.println("aaaaaaaaaaaaaaaaaaaa - "+t);
+
+					Parameter name = (Parameter) getAttribute("federateName");
 					String str_name = name.getValueAsString();
-//					System.out.println(str_name);					
-//					if(str_name.equals("\"PtolemyMasterFederate\"")){
-						
-						/*******
-	                    HLA check here if there is data from RTI
-						 *********/
-						//angelo - mudando de Interaction para Attributes
-						//Interaction inter = rtiFederation.receivedData(nextHLAEventTime());
+					// System.out.println(str_name);
+					// if(str_name.equals("\"PtolemyMasterFederate\"")){
 
-						Attributes attrs = rtiFederation.receivedData(nextHLAEventTime());
-						
-						
-						if(attrs!=null){
-							//syso
-//							System.out.println("  ### Evento HLA recebido em " + attrs.getReceivedTime().toString());
-						
-							if(actorToFire instanceof PtolemyFederateActor){
-								PtolemyFederateActor fedActor = (PtolemyFederateActor)actorToFire;
-								
-								//angelo - mudando de Interaction para Attributes
-								//fedActor.addInteractionToSend(inter);//angelo - envia a interaction - comentei
-//								if(aux1 > 99){
-//									aux1 = 0;
-									fedActor.updateAtributesToSend(attrs);
-//								}else{
-//									aux1++;
-//								}
-								double nextTime = nextHLAEventTime(); //era normal
-								rtiFederation.consumeReceivedData(nextTime); //era normal							
-//								try {
-//									this.rtiFederation.advanceTimeTo(nextTime);
-//								} catch (RTIexception e) {
-//									e.printStackTrace();
-//								}
-//								System.out.println("masterrr");
-							}
-						}
-						
-//					}else{
-						/*******
-	                    HLA check here the actor and send data to RTI
-						 *********/
-						if(actorToFire instanceof PtolemyFederateActor){
+					/*******
+					 * HLA check here if there is data from RTI
+					 *********/
+					// angelo - mudando de Interaction para Attributes
+					// Interaction inter =
+					// rtiFederation.receivedData(nextHLAEventTime());
 
-							PtolemyFederateActor fedActor = (PtolemyFederateActor)actorToFire;
+					Attributes attrs = rtiFederation.receivedData(nextHLAEventTime());
+
+					if (attrs != null) {
+						// syso
+						// System.out.println("  ### Evento HLA recebido em " +
+						// attrs.getReceivedTime().toString());
+
+						if (actorToFire instanceof PtolemyFederateActor) {
+							PtolemyFederateActor fedActor = (PtolemyFederateActor) actorToFire;
 							
-							fedActor.fire();
-							try {
-
-								//if(aux > 1){
-									if(fedActor.hasDataToSend()){										
-										this.rtiFederation.sendData(fedActor.getDataToSend().stringValue());
-
-										//syso
-//										System.out.println("\t*** HLADirector - Data sent by "+ fedActor.getClass().toString() +
-//												" at " + getModelTime() + ": " + fedActor.getValue().stringValue());
-//										System.out.println("slaveeee");
-									}							
-									aux = 0;
-									double nextTime = nextHLAEventTime();
-
-									double certiTime = rtiFederation.getRTINextTime();
-
-									this.rtiFederation.advanceTimeTo(certiTime);
-									
-									//aki
-									if(certiTime < nextTime)
-										this.fireAt((Actor)fedActor, new Time(this, certiTime));
-										//this.rtiFederation.advanceTimeTo(nextTime);
-								//}else{
-								//	aux++;
-								//}								
-
-							} catch (RTIexception e) {
-								//System.out.println("testandoooo");
-								e.printStackTrace();
-							}
-						}else{
-							actorToFire.fire();
+							// angelo - mudando de Interaction para Attributes
+							// fedActor.addInteractionToSend(inter);//angelo -
+							// envia a interaction - comentei
+							// if(aux1 > 99){
+							// aux1 = 0;
+							fedActor.updateAtributesToSend(attrs);
+							// }else{
+							// aux1++;
+							// }
+							double nextTime = nextHLAEventTime(); // era normal
+							rtiFederation.consumeReceivedData(nextTime); // era
+																			// normal
+							// try {
+							// this.rtiFederation.advanceTimeTo(nextTime);
+							// } catch (RTIexception e) {
+							// e.printStackTrace();
+							// }
+							// System.out.println("masterrr");
 						}
-//						System.out.println("slavesss");
 					}
-					
-						
-//				}
-										
-					if (!actorToFire.postfire()) {
-						// This actor requests not to be fired again.
-						_disableActor(actorToFire);
-						break;
+
+					// }else{
+					/*******
+					 * HLA check here the actor and send data to RTI
+					 *********/
+					if (actorToFire instanceof PtolemyFederateActor) {
+
+						PtolemyFederateActor fedActor = (PtolemyFederateActor) actorToFire;
+
+						fedActor.fire();
+						try {
+
+							// if(aux > 1){
+							if (fedActor.hasDataToSend()) {
+								String k = fedActor.getDataToSend().stringValue();
+								this.rtiFederation.sendData(k);
+								System.out.println("Data sent to HLA: " + k);
+								// syso
+								// System.out.println("\t*** HLADirector - Data sent by "+
+								// fedActor.getClass().toString() +" at " +
+								// getModelTime() + ": " +
+								// fedActor.getValue().stringValue());
+								// System.out.println("slaveeee");
+							}
+							aux = 0;
+							double nextTime = nextHLAEventTime();
+
+							double certiTime = rtiFederation.getRTINextTime();
+
+							this.rtiFederation.advanceTimeTo(certiTime);
+
+							// aki
+							if (certiTime < nextTime)
+								this.fireAt((Actor) fedActor, new Time(this,
+										certiTime));
+							// this.rtiFederation.advanceTimeTo(nextTime);
+							// }else{
+							// aux++;
+							// }
+
+						} catch (RTIexception e) {
+							// System.out.println("testandoooo");
+							e.printStackTrace();
+						}
+					} else {
+						actorToFire.fire();
 					}
-				
+					// System.out.println("slavesss");
+				}
+
+				// }
+
+				if (!actorToFire.postfire()) {
+					// This actor requests not to be fired again.
+					_disableActor(actorToFire);
+					break;
+				}
 
 				// Check all the input ports of the actor to see whether there
 				// are more input tokens to be processed.
@@ -488,7 +516,7 @@ public abstract class HLADEDirector extends Director implements TimedDirector {
 			// check _stopFireRequested, but this doesn't actually work.
 			// In particular, firing an actor may trigger a call to stopFire(),
 			// for example if the actor makes a change request, as for example
-			// an FSM actor will do.  This will prevent subsequent firings,
+			// an FSM actor will do. This will prevent subsequent firings,
 			// incorrectly.
 
 			// The following code enforces that a firing of a
@@ -561,21 +589,21 @@ public abstract class HLADEDirector extends Director implements TimedDirector {
 		Object[] events = _eventQueue.toArray();
 		for (int i = 0; i < events.length; i++) {
 			DEEvent event = (DEEvent) events[i];
-			//if(event.actor() instanceof PtolemyFederateActor){
+			// if(event.actor() instanceof PtolemyFederateActor){
 
-				Time eventTime = event.timeStamp();
-				int eventMicrostep = event.microstep();
-				if (eventTime.compareTo(getModelTime()) > 0
-						|| eventMicrostep > _microstep) {
-					aFutureTime = eventTime;
-					break;
-				}
-			//}
+			Time eventTime = event.timeStamp();
+			int eventMicrostep = event.microstep();
+			if (eventTime.compareTo(getModelTime()) > 0
+					|| eventMicrostep > _microstep) {
+				aFutureTime = eventTime;
+				break;
+			}
+			// }
 		}
 
 		// Go through hierarchy to find the minimum step.
 		Director executiveDirector = ((CompositeActor) getContainer())
-		.getExecutiveDirector();
+				.getExecutiveDirector();
 		if (executiveDirector != null) {
 			Time aFutureTimeOfUpperLevel = executiveDirector
 					.getModelNextIterationTime();
@@ -587,13 +615,17 @@ public abstract class HLADEDirector extends Director implements TimedDirector {
 		return aFutureTime.getDoubleValue();
 	}
 
-	/** Schedule an actor to be fired at the specified time by posting
-	 *  a pure event to the director. If the requested time is in the past
-	 *  relative to the current time, then replace it with the current
-	 *  model time.
-	 *  @param actor The scheduled actor to fire.
-	 *  @param time The scheduled time to fire.
-	 *  @exception IllegalActionException If event queue is not ready.
+	/**
+	 * Schedule an actor to be fired at the specified time by posting a pure
+	 * event to the director. If the requested time is in the past relative to
+	 * the current time, then replace it with the current model time.
+	 * 
+	 * @param actor
+	 *            The scheduled actor to fire.
+	 * @param time
+	 *            The scheduled time to fire.
+	 * @exception IllegalActionException
+	 *                If event queue is not ready.
 	 */
 	public void fireAt(Actor actor, Time time) throws IllegalActionException {
 		if (_eventQueue == null) {
@@ -617,7 +649,7 @@ public abstract class HLADEDirector extends Director implements TimedDirector {
 		// If this is occurring between iterations within
 		// an opaque composite actor, then postfire() will not
 		// be invoked again to pass this fireAt() request up
-		// the hierarchy to the executive director.  We
+		// the hierarchy to the executive director. We
 		// have to pass it up here.
 		if (_delegateFireAt) {
 			CompositeActor container = (CompositeActor) getContainer();
@@ -630,9 +662,13 @@ public abstract class HLADEDirector extends Director implements TimedDirector {
 		}
 	}
 
-	/** Schedule a firing of the given actor at the current time.
-	 *  @param actor The actor to be fired.
-	 *  @exception IllegalActionException If event queue is not ready.
+	/**
+	 * Schedule a firing of the given actor at the current time.
+	 * 
+	 * @param actor
+	 *            The actor to be fired.
+	 * @exception IllegalActionException
+	 *                If event queue is not ready.
 	 */
 	public void fireAtCurrentTime(Actor actor) throws IllegalActionException {
 		if (_eventQueue == null) {
@@ -647,32 +683,40 @@ public abstract class HLADEDirector extends Director implements TimedDirector {
 		}
 	}
 
-	/** Schedule an actor to be fired in the specified time relative to
-	 *  the current model time.
-	 *  @param actor The scheduled actor to fire.
-	 *  @param time The scheduled time to fire.
-	 *  @exception IllegalActionException If the specified time contains
-	 *  a negative time value, or event queue is not ready.
+	/**
+	 * Schedule an actor to be fired in the specified time relative to the
+	 * current model time.
+	 * 
+	 * @param actor
+	 *            The scheduled actor to fire.
+	 * @param time
+	 *            The scheduled time to fire.
+	 * @exception IllegalActionException
+	 *                If the specified time contains a negative time value, or
+	 *                event queue is not ready.
 	 */
 	public void fireAtRelativeTime(Actor actor, Time time)
 			throws IllegalActionException {
 		fireAt(actor, time.add(getModelTime()));
 	}
 
-	/** Return the event queue. Note that this method is not synchronized.
-	 *  Any further accesses to this event queue needs synchronization.
-	 *  @return The event queue.
+	/**
+	 * Return the event queue. Note that this method is not synchronized. Any
+	 * further accesses to this event queue needs synchronization.
+	 * 
+	 * @return The event queue.
 	 */
 	public DEEventQueue getEventQueue() {
 		return _eventQueue;
 	}
 
-	/** Return the timestamp of the next event in the queue.
-	 *  The next iteration time, for example, is used to estimate the
-	 *  run-ahead time, when a continuous time composite actor is embedded
-	 *  in a DE model. If there is no event in the event queue, a positive
-	 *  infinity object is returned.
-	 *  @return The time stamp of the next event in the event queue.
+	/**
+	 * Return the timestamp of the next event in the queue. The next iteration
+	 * time, for example, is used to estimate the run-ahead time, when a
+	 * continuous time composite actor is embedded in a DE model. If there is no
+	 * event in the event queue, a positive infinity object is returned.
+	 * 
+	 * @return The time stamp of the next event in the event queue.
 	 */
 	public Time getModelNextIterationTime() {
 		Time aFutureTime = Time.POSITIVE_INFINITY;
@@ -715,72 +759,82 @@ public abstract class HLADEDirector extends Director implements TimedDirector {
 		return aFutureTime;
 	}
 
-	/** Return the start time parameter value.
-	 *  @return the start time parameter value.
+	/**
+	 * Return the start time parameter value.
+	 * 
+	 * @return the start time parameter value.
 	 */
 	public final Time getModelStartTime() {
 		// This method is final for performance reason.
 		return _startTime;
 	}
 
-	/** Return the stop time parameter value.
-	 *  @return the stop time parameter value.
+	/**
+	 * Return the stop time parameter value.
+	 * 
+	 * @return the stop time parameter value.
 	 */
 	public final Time getModelStopTime() {
 		// This method is final for performance reason.
 		return _stopTime;
 	}
 
-	/** Return the system time at which the model begins executing.
-	 *  That is, the system time (in milliseconds) when the initialize()
-	 *  method of the director is called.
-	 *  The time is in the form of milliseconds counting
-	 *  from 1/1/1970 (UTC).
-	 *  @return The real start time of the model.
+	/**
+	 * Return the system time at which the model begins executing. That is, the
+	 * system time (in milliseconds) when the initialize() method of the
+	 * director is called. The time is in the form of milliseconds counting from
+	 * 1/1/1970 (UTC).
+	 * 
+	 * @return The real start time of the model.
 	 */
 	public long getRealStartTimeMillis() {
 		return _realStartTime;
 	}
 
-	/** Return the start time parameter value.
-	 *  <p>
-	 *  When the start time is too big, the double representation loses
-	 *  the specified time resolution. To avoid this loss, use the
-	 *  {@link #getModelStartTime()} instead.</p>
-	 *  @return the start time.
-	 *  @deprecated As Ptolemy II 4.1, use {@link #getModelStartTime()}
-	 *  instead.
+	/**
+	 * Return the start time parameter value.
+	 * <p>
+	 * When the start time is too big, the double representation loses the
+	 * specified time resolution. To avoid this loss, use the
+	 * {@link #getModelStartTime()} instead.
+	 * </p>
+	 * 
+	 * @return the start time.
+	 * @deprecated As Ptolemy II 4.1, use {@link #getModelStartTime()} instead.
 	 */
 	public final double getStartTime() {
 		// This method is final for performance reason.
 		return getModelStartTime().getDoubleValue();
 	}
 
-	/** Return the stop time.
-	 *  <p>
-	 *  When the stop time is too big, the double representation loses
-	 *  the specified time resolution. To avoid this loss, use the
-	 *  {@link #getModelStopTime()} instead.</p>
-	 *  @return the stop time.
-	 *  @deprecated As Ptolemy II 4.1, use {@link #getModelStopTime()}
-	 *  instead.
+	/**
+	 * Return the stop time.
+	 * <p>
+	 * When the stop time is too big, the double representation loses the
+	 * specified time resolution. To avoid this loss, use the
+	 * {@link #getModelStopTime()} instead.
+	 * </p>
+	 * 
+	 * @return the stop time.
+	 * @deprecated As Ptolemy II 4.1, use {@link #getModelStopTime()} instead.
 	 */
 	public final double getStopTime() {
 		// This method is final for performance reason.
 		return getModelStopTime().getDoubleValue();
 	}
 
-	/** Initialize all the contained actors by invoke the initialize() method
-	 *  of the super class. If any events are generated during the
-	 *  initialization, and the container is not at the top level, request a
-	 *  refiring.
-	 *  <p>
-	 *  The real start time of the model is recorded when this method
-	 *  is called. This method is <i>not</i> synchronized on the workspace,
-	 *  so the caller should be.</p>
-	 *
-	 *  @exception IllegalActionException If the initialize() method of
-	 *   the super class throws it.
+	/**
+	 * Initialize all the contained actors by invoke the initialize() method of
+	 * the super class. If any events are generated during the initialization,
+	 * and the container is not at the top level, request a refiring.
+	 * <p>
+	 * The real start time of the model is recorded when this method is called.
+	 * This method is <i>not</i> synchronized on the workspace, so the caller
+	 * should be.
+	 * </p>
+	 * 
+	 * @exception IllegalActionException
+	 *                If the initialize() method of the super class throws it.
 	 */
 	public void initialize() throws IllegalActionException {
 		_isInitializing = true;
@@ -796,12 +850,13 @@ public abstract class HLADEDirector extends Director implements TimedDirector {
 
 		super.initialize();
 
-
-		//RTI: Start Federate
+		// RTI: Start Federate
 		System.out.println("HLADEDirector - initialize()");
 
-		String name = ((StringToken)(this.federateName.getToken())).stringValue();
-		String fedFileName = ((StringToken)(this.federateFile.getToken())).stringValue();
+		String name = ((StringToken) (this.federateName.getToken()))
+				.stringValue();
+		String fedFileName = ((StringToken) (this.federateFile.getToken()))
+				.stringValue();
 		try {
 			rtiFederation.createFederate(name, fedFileName);
 		} catch (RTIexception e) {
@@ -836,7 +891,9 @@ public abstract class HLADEDirector extends Director implements TimedDirector {
 		_isInitializing = false;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see ptolemy.actor.Director#terminate()
 	 */
 	@Override
@@ -854,17 +911,20 @@ public abstract class HLADEDirector extends Director implements TimedDirector {
 		}
 	}
 
-	/** Indicate that the topological sort of the model may no longer be valid.
-	 *  This method should be called when topology changes are made.
-	 *  It sets a flag which will cause the topological
-	 *  sort to be redone next time when an event is enqueued.
+	/**
+	 * Indicate that the topological sort of the model may no longer be valid.
+	 * This method should be called when topology changes are made. It sets a
+	 * flag which will cause the topological sort to be redone next time when an
+	 * event is enqueued.
 	 */
 	public void invalidateSchedule() {
 		_sortValid = -1;
 	}
 
-	/** Return a new receiver of the type DEReceiver.
-	 *  @return A new DEReceiver.
+	/**
+	 * Return a new receiver of the type DEReceiver.
+	 * 
+	 * @return A new DEReceiver.
 	 */
 	public Receiver newReceiver() {
 		if (_debugging && _verbose) {
@@ -874,15 +934,18 @@ public abstract class HLADEDirector extends Director implements TimedDirector {
 		return new DEReceiver();
 	}
 
-	/** Return false if there are no more actors to be fired or the stop()
-	 *  method has been called. Otherwise, if the director is an embedded
-	 *  director and the local event queue is not empty, request the executive
-	 *  director to refire the container of this director at the timestamp of
-	 *  the first event in the event queue.
-	 *  @return True If this director will be fired again.
-	 *  @exception IllegalActionException If the postfire method of the super
-	 *  class throws it, or the stopWhenQueueIsEmpty parameter does not contain
-	 *  a valid token, or refiring can not be requested.
+	/**
+	 * Return false if there are no more actors to be fired or the stop() method
+	 * has been called. Otherwise, if the director is an embedded director and
+	 * the local event queue is not empty, request the executive director to
+	 * refire the container of this director at the timestamp of the first event
+	 * in the event queue.
+	 * 
+	 * @return True If this director will be fired again.
+	 * @exception IllegalActionException
+	 *                If the postfire method of the super class throws it, or
+	 *                the stopWhenQueueIsEmpty parameter does not contain a
+	 *                valid token, or refiring can not be requested.
 	 */
 	public boolean postfire() throws IllegalActionException {
 		boolean result = super.postfire();
@@ -892,8 +955,8 @@ public abstract class HLADEDirector extends Director implements TimedDirector {
 		// There are two conditions to stop the model.
 		// 1. There are no more actors to be fired (i.e. event queue is
 		// empty), and either of the following conditions is satisfied:
-		//     a. the stopWhenQueueIsEmpty parameter is set to true.
-		//     b. the current model time equals the model stop time.
+		// a. the stopWhenQueueIsEmpty parameter is set to true.
+		// b. the current model time equals the model stop time.
 		// 2. The event queue is not empty, but the current time exceeds
 		// the stop time.
 		if (_noMoreActorsToFire
@@ -922,50 +985,54 @@ public abstract class HLADEDirector extends Director implements TimedDirector {
 		// different tags can exist in the same receiver.
 		// This is a quite different semantics from the previous designs,
 		// and its effects are still under investigation and debate.
-		//        // Clear all of the contained actor's input ports.
-		//        for (Iterator actors = ((CompositeActor)getContainer())
-		//                .entityList(Actor.class).iterator();
-		//                actors.hasNext();) {
-		//            Entity actor = (Entity)actors.next();
-		//            Iterator ports = actor.portList().iterator();
-		//            while (ports.hasNext()) {
-		//                IOPort port = (IOPort)ports.next();
-		//                if (port.isInput()) {
-		//                    // Clear all receivers.
-		//                    Receiver[][] receivers = port.getReceivers();
-		//                    if (receivers == null) {
-		//                        throw new InternalErrorException(this, null,
-		//                                "port.getReceivers() returned null! "
-		//                                + "This should never happen. "
-		//                                + "port was '" + port + "'");
-		//                    }
-		//                    for (int i = 0; i < receivers.length; i++) {
-		//                        Receiver[] receivers2 = receivers[i];
-		//                        for (int j = 0; j < receivers2.length; j++) {
-		//                            receivers2[j].clear();
-		//                        }
-		//                    }
-		//                }
-		//            }
-		//        }
+		// // Clear all of the contained actor's input ports.
+		// for (Iterator actors = ((CompositeActor)getContainer())
+		// .entityList(Actor.class).iterator();
+		// actors.hasNext();) {
+		// Entity actor = (Entity)actors.next();
+		// Iterator ports = actor.portList().iterator();
+		// while (ports.hasNext()) {
+		// IOPort port = (IOPort)ports.next();
+		// if (port.isInput()) {
+		// // Clear all receivers.
+		// Receiver[][] receivers = port.getReceivers();
+		// if (receivers == null) {
+		// throw new InternalErrorException(this, null,
+		// "port.getReceivers() returned null! "
+		// + "This should never happen. "
+		// + "port was '" + port + "'");
+		// }
+		// for (int i = 0; i < receivers.length; i++) {
+		// Receiver[] receivers2 = receivers[i];
+		// for (int j = 0; j < receivers2.length; j++) {
+		// receivers2[j].clear();
+		// }
+		// }
+		// }
+		// }
+		// }
 		return result;
 	}
 
-	/** Set the model timestamp to the outside timestamp if this director is
-	 *  not at the top level. Check the timestamp of the next event to decide
-	 *  whether to fire. Return true if there are inputs to this composite
-	 *  actor, or the timestamp of the next event is equal to the current model
-	 *  timestamp. Otherwise, return false.
-	 *  <p>
-	 *  Note that microsteps are not synchronized.
-	 *  </p><p>
-	 *  Throw an exception if the current model time is greater than the next
-	 *  event timestamp.
-	 *  @return True if the composite actor is ready to fire.
-	 *  @exception IllegalActionException If there is a missed event,
-	 *  or the prefire method of the super class throws it, or can not
-	 *  query the tokens of the input ports of the container of this
-	 *  director.</p>
+	/**
+	 * Set the model timestamp to the outside timestamp if this director is not
+	 * at the top level. Check the timestamp of the next event to decide whether
+	 * to fire. Return true if there are inputs to this composite actor, or the
+	 * timestamp of the next event is equal to the current model timestamp.
+	 * Otherwise, return false.
+	 * <p>
+	 * Note that microsteps are not synchronized.
+	 * </p>
+	 * <p>
+	 * Throw an exception if the current model time is greater than the next
+	 * event timestamp.
+	 * 
+	 * @return True if the composite actor is ready to fire.
+	 * @exception IllegalActionException
+	 *                If there is a missed event, or the prefire method of the
+	 *                super class throws it, or can not query the tokens of the
+	 *                input ports of the container of this director.
+	 *                </p>
 	 */
 	public boolean prefire() throws IllegalActionException {
 		// NOTE: The inside model does not need to have the same
@@ -1055,27 +1122,31 @@ public abstract class HLADEDirector extends Director implements TimedDirector {
 		return result;
 	}
 
-	/** Set the current timestamp to the model start time, invoke the
-	 *  preinitialize() methods of all actors deeply contained by the
-	 *  container.
-	 *  <p>
-	 *  This method should be invoked once per execution, before any
-	 *  iteration. Actors cannot produce output data in their preinitialize()
-	 *  methods. If initial events are needed, e.g. pure events for source
-	 *  actor, the actors should do so in their initialize() method.
-	 *  </p><p>
-	 *  This method is <i>not</i> synchronized on the workspace, so the
-	 *  caller should be.</p>
-	 *
-	 *  @exception IllegalActionException If the preinitialize() method of the
-	 *  container or one of the deeply contained actors throws it, or the
-	 *  parameters, minBinCount, binCountFactor, and isCQAdaptive, do not have
-	 *  valid tokens.
+	/**
+	 * Set the current timestamp to the model start time, invoke the
+	 * preinitialize() methods of all actors deeply contained by the container.
+	 * <p>
+	 * This method should be invoked once per execution, before any iteration.
+	 * Actors cannot produce output data in their preinitialize() methods. If
+	 * initial events are needed, e.g. pure events for source actor, the actors
+	 * should do so in their initialize() method.
+	 * </p>
+	 * <p>
+	 * This method is <i>not</i> synchronized on the workspace, so the caller
+	 * should be.
+	 * </p>
+	 * 
+	 * @exception IllegalActionException
+	 *                If the preinitialize() method of the container or one of
+	 *                the deeply contained actors throws it, or the parameters,
+	 *                minBinCount, binCountFactor, and isCQAdaptive, do not have
+	 *                valid tokens.
 	 */
 	public void preinitialize() throws IllegalActionException {
 		// Initialize an event queue.
-		_eventQueue = new DECQEventQueue(((IntToken) minBinCount.getToken())
-				.intValue(), ((IntToken) binCountFactor.getToken()).intValue(),
+		_eventQueue = new DECQEventQueue(
+				((IntToken) minBinCount.getToken()).intValue(),
+				((IntToken) binCountFactor.getToken()).intValue(),
 				((BooleanToken) isCQAdaptive.getToken()).booleanValue());
 
 		// Add debug listeners.
@@ -1103,11 +1174,14 @@ public abstract class HLADEDirector extends Director implements TimedDirector {
 		}
 	}
 
-	/** Unregister a debug listener.  If the specified listener has not
-	 *  been previously registered, then do nothing.
-	 *  @param listener The listener to remove from the list of listeners
-	 *   to which debug messages are sent.
-	 *  @see #addDebugListener(DebugListener)
+	/**
+	 * Unregister a debug listener. If the specified listener has not been
+	 * previously registered, then do nothing.
+	 * 
+	 * @param listener
+	 *            The listener to remove from the list of listeners to which
+	 *            debug messages are sent.
+	 * @see #addDebugListener(DebugListener)
 	 */
 	public void removeDebugListener(DebugListener listener) {
 		if (_eventQueue != null) {
@@ -1117,15 +1191,15 @@ public abstract class HLADEDirector extends Director implements TimedDirector {
 		super.removeDebugListener(listener);
 	}
 
-	/** Request the execution of the current iteration to stop.
-	 *  This is similar to stopFire(), except that the current iteration
-	 *  is not allowed to complete.  This is useful if there is actor
-	 *  in the model that has a bug where it fails to consume inputs.
-	 *  An iteration will never terminate if such an actor receives
-	 *  an event.
-	 *  If the director is paused waiting for events to appear in the
-	 *  event queue, then it stops waiting, and calls stopFire() for all actors
-	 *  that are deeply contained by the container of this director.
+	/**
+	 * Request the execution of the current iteration to stop. This is similar
+	 * to stopFire(), except that the current iteration is not allowed to
+	 * complete. This is useful if there is actor in the model that has a bug
+	 * where it fails to consume inputs. An iteration will never terminate if
+	 * such an actor receives an event. If the director is paused waiting for
+	 * events to appear in the event queue, then it stops waiting, and calls
+	 * stopFire() for all actors that are deeply contained by the container of
+	 * this director.
 	 */
 	public void stop() {
 		if (_eventQueue != null) {
@@ -1138,11 +1212,11 @@ public abstract class HLADEDirector extends Director implements TimedDirector {
 		super.stop();
 	}
 
-	/** Request the execution of the current iteration to complete.
-	 *  If the director is paused waiting for events to appear in the
-	 *  event queue, then it stops waiting,
-	 *  and calls stopFire() for all actors
-	 *  that are deeply contained by the container of this director.
+	/**
+	 * Request the execution of the current iteration to complete. If the
+	 * director is paused waiting for events to appear in the event queue, then
+	 * it stops waiting, and calls stopFire() for all actors that are deeply
+	 * contained by the container of this director.
 	 */
 	public void stopFire() {
 		if (_eventQueue != null) {
@@ -1158,12 +1232,13 @@ public abstract class HLADEDirector extends Director implements TimedDirector {
 	// FIXME: it is questionable whether the multirate FSMActor and FSMDirector
 	// should be used in DE as the default? I will say NO.
 
-	/** Return an array of suggested directors to use with
-	 *  ModalModel. Each director is specified by its full class
-	 *  name.  The first director in the array will be the default
-	 *  director used by a modal model.
-	 *  @return An array of suggested directors to be used with ModalModel.
-	 *  @see ptolemy.actor.Director#suggestedModalModelDirectors()
+	/**
+	 * Return an array of suggested directors to use with ModalModel. Each
+	 * director is specified by its full class name. The first director in the
+	 * array will be the default director used by a modal model.
+	 * 
+	 * @return An array of suggested directors to be used with ModalModel.
+	 * @see ptolemy.actor.Director#suggestedModalModelDirectors()
 	 */
 	public String[] suggestedModalModelDirectors() {
 		String[] defaultSuggestions = new String[2];
@@ -1181,17 +1256,18 @@ public abstract class HLADEDirector extends Director implements TimedDirector {
 	// false from its prefire() method, meaning that the actor has not enough
 	// input tokens.
 
-	/** Override the base class method to transfer all the available
-	 *  tokens at the boundary output port to outside.
-	 *  No data remains at the boundary after the model has been fired.
-	 *  This facilitates building multirate DE models.
-	 *  The port argument must be an opaque output port. If any channel
-	 *  of the output port has no data, then that channel is ignored.
-	 *
-	 *  @exception IllegalActionException If the port is not an opaque
-	 *   output port.
-	 *  @param port The port to transfer tokens from.
-	 *  @return True if data are transferred.
+	/**
+	 * Override the base class method to transfer all the available tokens at
+	 * the boundary output port to outside. No data remains at the boundary
+	 * after the model has been fired. This facilitates building multirate DE
+	 * models. The port argument must be an opaque output port. If any channel
+	 * of the output port has no data, then that channel is ignored.
+	 * 
+	 * @exception IllegalActionException
+	 *                If the port is not an opaque output port.
+	 * @param port
+	 *            The port to transfer tokens from.
+	 * @return True if data are transferred.
 	 */
 	public boolean transferOutputs(IOPort port) throws IllegalActionException {
 		boolean anyWereTransferred = false;
@@ -1205,10 +1281,13 @@ public abstract class HLADEDirector extends Director implements TimedDirector {
 		return anyWereTransferred;
 	}
 
-	/** Invoke the wrapup method of the super class. Reset the private
-	 *  state variables.
-	 *  @exception IllegalActionException If the wrapup() method of
-	 *  one of the associated actors throws it.
+	/**
+	 * Invoke the wrapup method of the super class. Reset the private state
+	 * variables.
+	 * 
+	 * @exception IllegalActionException
+	 *                If the wrapup() method of one of the associated actors
+	 *                throws it.
 	 */
 	public void wrapup() throws IllegalActionException {
 		super.wrapup();
@@ -1218,27 +1297,34 @@ public abstract class HLADEDirector extends Director implements TimedDirector {
 		_microstep = 0;
 	}
 
-	///////////////////////////////////////////////////////////////////
-	////                         protected methods                 ////
+	// /////////////////////////////////////////////////////////////////
+	// // protected methods ////
 
-	/** Put a pure event into the event queue to schedule the given actor to
-	 *  fire at the specified timestamp.
-	 *  <p>
-	 *  The default microstep for the queued event is equal to zero,
-	 *  unless the time is equal to the current time, where the microstep
-	 *  will be the current microstep plus one.
-	 *  </p><p>
-	 *  The depth for the queued event is the minimum of the depths of
-	 *  all the ports of the destination actor.
-	 *  </p><p>
-	 *  If there is no event queue or the given actor is disabled, then
-	 *  this method does nothing.</p>
-	 *
-	 *  @param actor The actor to be fired.
-	 *  @param time The timestamp of the event.
-	 *  @exception IllegalActionException If the time argument is less than
-	 *  the current model time, or the depth of the actor has not be calculated,
-	 *  or the new event can not be enqueued.
+	/**
+	 * Put a pure event into the event queue to schedule the given actor to fire
+	 * at the specified timestamp.
+	 * <p>
+	 * The default microstep for the queued event is equal to zero, unless the
+	 * time is equal to the current time, where the microstep will be the
+	 * current microstep plus one.
+	 * </p>
+	 * <p>
+	 * The depth for the queued event is the minimum of the depths of all the
+	 * ports of the destination actor.
+	 * </p>
+	 * <p>
+	 * If there is no event queue or the given actor is disabled, then this
+	 * method does nothing.
+	 * </p>
+	 * 
+	 * @param actor
+	 *            The actor to be fired.
+	 * @param time
+	 *            The timestamp of the event.
+	 * @exception IllegalActionException
+	 *                If the time argument is less than the current model time,
+	 *                or the depth of the actor has not be calculated, or the
+	 *                new event can not be enqueued.
 	 */
 	protected void _enqueueEvent(Actor actor, Time time)
 			throws IllegalActionException {
@@ -1274,27 +1360,32 @@ public abstract class HLADEDirector extends Director implements TimedDirector {
 		if (_debugging) {
 			_debug("enqueue a pure event: ", ((NamedObj) actor).getName(),
 					"time = " + time + " microstep = " + microstep
-					+ " depth = " + depth);
+							+ " depth = " + depth);
 		}
 
 		DEEvent newEvent = new DEEvent(actor, time, microstep, depth);
 		_eventQueue.put(newEvent);
 	}
 
-	/** Put a trigger event into the event queue.
-	 *  <p>
-	 *  The trigger event has the same timestamp as that of the director.
-	 *  The microstep of this event is always equal to the current microstep
-	 *  of this director. The depth for the queued event is the
-	 *  depth of the destination IO port.
-	 *  </p><p>
-	 *  If the event queue is not ready or the actor contains the destination
-	 *  port is disabled, do nothing.</p>
-	 *
-	 *  @param ioPort The destination IO port.
-	 *  @exception IllegalActionException If the time argument is not the
-	 *  current time, or the depth of the given IO port has not be calculated,
-	 *  or the new event can not be enqueued.
+	/**
+	 * Put a trigger event into the event queue.
+	 * <p>
+	 * The trigger event has the same timestamp as that of the director. The
+	 * microstep of this event is always equal to the current microstep of this
+	 * director. The depth for the queued event is the depth of the destination
+	 * IO port.
+	 * </p>
+	 * <p>
+	 * If the event queue is not ready or the actor contains the destination
+	 * port is disabled, do nothing.
+	 * </p>
+	 * 
+	 * @param ioPort
+	 *            The destination IO port.
+	 * @exception IllegalActionException
+	 *                If the time argument is not the current time, or the depth
+	 *                of the given IO port has not be calculated, or the new
+	 *                event can not be enqueued.
 	 */
 	protected void _enqueueTriggerEvent(IOPort ioPort)
 			throws IllegalActionException {
@@ -1311,8 +1402,8 @@ public abstract class HLADEDirector extends Director implements TimedDirector {
 		if (_debugging) {
 			_debug("enqueue a trigger event for ",
 					((NamedObj) actor).getName(), " time = " + getModelTime()
-					+ " microstep = " + _microstep + " depth = "
-					+ depth);
+							+ " microstep = " + _microstep + " depth = "
+							+ depth);
 		}
 
 		// Register this trigger event.
@@ -1321,14 +1412,17 @@ public abstract class HLADEDirector extends Director implements TimedDirector {
 		_eventQueue.put(newEvent);
 	}
 
-	///////////////////////////////////////////////////////////////////
-	////                         private methods                   ////
+	// /////////////////////////////////////////////////////////////////
+	// // private methods ////
 
-	/** Based on the depths of IO ports, calculate the depths of actors.
-	 *  The results are cached in a hashtable _actorToDepth.
-	 *  Update the depths of existing events in the event queue.
-	 *  @exception IllegalActionException If thrown will getting the depth
-	 *  of the IO ports or while updating the depth of the the actors.
+	/**
+	 * Based on the depths of IO ports, calculate the depths of actors. The
+	 * results are cached in a hashtable _actorToDepth. Update the depths of
+	 * existing events in the event queue.
+	 * 
+	 * @exception IllegalActionException
+	 *                If thrown will getting the depth of the IO ports or while
+	 *                updating the depth of the the actors.
 	 */
 	protected void _computeActorDepth() throws IllegalActionException {
 		CompositeActor container = (CompositeActor) getContainer();
@@ -1429,9 +1523,10 @@ public abstract class HLADEDirector extends Director implements TimedDirector {
 		}
 	}
 
-	/** Perform a topological sort on the directed graph and use the result
-	 *  to set the depth for each IO port. A new Hashtable is created each
-	 *  time this method is called.
+	/**
+	 * Perform a topological sort on the directed graph and use the result to
+	 * set the depth for each IO port. A new Hashtable is created each time this
+	 * method is called.
 	 */
 	private void _computePortDepth() throws IllegalActionException {
 		DirectedAcyclicGraph portsGraph = _constructDirectedGraph();
@@ -1486,7 +1581,7 @@ public abstract class HLADEDirector extends Director implements TimedDirector {
 
 		// Adjusts the depths according to:
 		// - If an output depends on several inputs directly,
-		//   all inputs must have the same depth, the biggest one.
+		// all inputs must have the same depth, the biggest one.
 		for (int i = sort.length - 1; i >= 0; i--) {
 			IOPort ioPort = (IOPort) sort[i];
 
@@ -1557,8 +1652,8 @@ public abstract class HLADEDirector extends Director implements TimedDirector {
 						}
 
 						// Insert the hashtable entry.
-						_portToDepth.put(input, Integer
-								.valueOf(maximumPortDepth));
+						_portToDepth.put(input,
+								Integer.valueOf(maximumPortDepth));
 					}
 				}
 			}
@@ -1633,7 +1728,7 @@ public abstract class HLADEDirector extends Director implements TimedDirector {
 				.getFunctionDependency();
 
 		// NOTE: The following may be a very costly test.
-		//       -- from the comments of previous implementations.
+		// -- from the comments of previous implementations.
 		// If the port based data flow graph contains directed
 		// loops, the model is invalid. An IllegalActionException
 		// is thrown with the names of the actors in the loop.
@@ -1663,9 +1758,12 @@ public abstract class HLADEDirector extends Director implements TimedDirector {
 		return portsGraph;
 	}
 
-	/** Disable the specified actor.  All events destined to this actor
-	 *  will be ignored. If the argument is null, then do nothing.
-	 *  @param actor The actor to disable.
+	/**
+	 * Disable the specified actor. All events destined to this actor will be
+	 * ignored. If the argument is null, then do nothing.
+	 * 
+	 * @param actor
+	 *            The actor to disable.
 	 */
 	protected void _disableActor(Actor actor) {
 		if (actor != null) {
@@ -1681,11 +1779,14 @@ public abstract class HLADEDirector extends Director implements TimedDirector {
 		}
 	}
 
-	/** Calculate the depth of an actor.
-	 *  @param actor An actor whose depth is requested.
-	 *  @return An integer indicating the depth of the given actor.
-	 *  @exception IllegalActionException If any port of this actor
-	 *  is not sorted.
+	/**
+	 * Calculate the depth of an actor.
+	 * 
+	 * @param actor
+	 *            An actor whose depth is requested.
+	 * @return An integer indicating the depth of the given actor.
+	 * @exception IllegalActionException
+	 *                If any port of this actor is not sorted.
 	 */
 	protected int _getDepthOfActor(Actor actor) throws IllegalActionException {
 		if ((_sortValid != workspace().getVersion()) || (_actorToDepth == null)) {
@@ -1704,13 +1805,18 @@ public abstract class HLADEDirector extends Director implements TimedDirector {
 		}
 	}
 
-	/** Return the depth of an ioPort, which is the index of this ioPort in
-	 *  topological sort.
-	 *  @param ioPort An IOPort whose depth is requested.
-	 *  @return An int representing the depth of the given ioPort.
-	 *  @exception IllegalActionException If the ioPort is not sorted.
+	/**
+	 * Return the depth of an ioPort, which is the index of this ioPort in
+	 * topological sort.
+	 * 
+	 * @param ioPort
+	 *            An IOPort whose depth is requested.
+	 * @return An int representing the depth of the given ioPort.
+	 * @exception IllegalActionException
+	 *                If the ioPort is not sorted.
 	 */
-	protected int _getDepthOfIOPort(IOPort ioPort) throws IllegalActionException {
+	protected int _getDepthOfIOPort(IOPort ioPort)
+			throws IllegalActionException {
 		if ((_sortValid != workspace().getVersion()) || (_portToDepth == null)) {
 			_computePortDepth();
 			_computeActorDepth();
@@ -1726,22 +1832,26 @@ public abstract class HLADEDirector extends Director implements TimedDirector {
 		}
 	}
 
-	/** Dequeue the events that have the smallest tag from the event queue.
-	 *  Return their destination actor. Advance the model tag to their tag.
-	 *  If the timestamp of the smallest tag is greater than the stop time
-	 *  then return null. If there are no events in the event queue, and
-	 *  the stopWhenQueueIsEmpty parameter is set to true, then return null.
-	 *  Both cases will have the effect of stopping the simulation.
-	 *  <p>
-	 *  If the stopWhenQueueIsEmpty parameter is false and the queue is empty,
-	 *  then stall the current thread by calling wait() on the _eventQueue
-	 *  until there are new events available.  If the synchronizeToRealTime
-	 *  parameter is true, then this method may suspend the calling thread
-	 *  by using Object.wait(long) to let elapsed real time catch up with the
-	 *  current model time.</p>
-	 *  @return The next actor to be fired, which can be null.
-	 *  @exception IllegalActionException If event queue is not ready, or
-	 *  an event is missed, or time is set backwards.
+	/**
+	 * Dequeue the events that have the smallest tag from the event queue.
+	 * Return their destination actor. Advance the model tag to their tag. If
+	 * the timestamp of the smallest tag is greater than the stop time then
+	 * return null. If there are no events in the event queue, and the
+	 * stopWhenQueueIsEmpty parameter is set to true, then return null. Both
+	 * cases will have the effect of stopping the simulation.
+	 * <p>
+	 * If the stopWhenQueueIsEmpty parameter is false and the queue is empty,
+	 * then stall the current thread by calling wait() on the _eventQueue until
+	 * there are new events available. If the synchronizeToRealTime parameter is
+	 * true, then this method may suspend the calling thread by using
+	 * Object.wait(long) to let elapsed real time catch up with the current
+	 * model time.
+	 * </p>
+	 * 
+	 * @return The next actor to be fired, which can be null.
+	 * @exception IllegalActionException
+	 *                If event queue is not ready, or an event is missed, or
+	 *                time is set backwards.
 	 */
 	private Actor _getNextActorToFire() throws IllegalActionException {
 		if (_eventQueue == null) {
@@ -1871,7 +1981,8 @@ public abstract class HLADEDirector extends Director implements TimedDirector {
 				} // Close the blocking read while loop
 
 				// To reach this point, either the event queue is not empty,
-				// or _stopRequested or _stopFireRequested is true, or an interrupted exception
+				// or _stopRequested or _stopFireRequested is true, or an
+				// interrupted exception
 				// happened.
 				if (_eventQueue.isEmpty()) {
 					// Stop is requested or this method is interrupted.
@@ -1917,29 +2028,38 @@ public abstract class HLADEDirector extends Director implements TimedDirector {
 									- _realStartTime;
 
 							// NOTE: We assume that the elapsed time can be
-							// safely cast to a double.  This means that
+							// safely cast to a double. This means that
 							// the DE domain has an upper limit on running
 							// time of Double.MAX_VALUE milliseconds.
 							double elapsedTimeInSeconds = elapsedTime / 1000.0;
-							ptolemy.actor.util.Time elapsed
-							= new ptolemy.actor.util.Time(this, elapsedTimeInSeconds);
+							ptolemy.actor.util.Time elapsed = new ptolemy.actor.util.Time(
+									this, elapsedTimeInSeconds);
 							if (currentTime.compareTo(elapsed) <= 0) {
 								break;
 							}
 
-							// NOTE: We used to do the following, but it had a limitation.
-							// In particular, if any user code also calculated the elapsed
-							// time and then constructed a Time object to post an event
-							// on the event queue, there was no assurance that the quantization
-							// would be the same, and hence it was possible for that event
-							// to be in the past when posted, even if done in the same thread.
-							// To ensure that the comparison of current time against model time
-							// always yields the same result, we have to do the comparison using
-							// the Time class, which is what the event queue does.
+							// NOTE: We used to do the following, but it had a
+							// limitation.
+							// In particular, if any user code also calculated
+							// the elapsed
+							// time and then constructed a Time object to post
+							// an event
+							// on the event queue, there was no assurance that
+							// the quantization
+							// would be the same, and hence it was possible for
+							// that event
+							// to be in the past when posted, even if done in
+							// the same thread.
+							// To ensure that the comparison of current time
+							// against model time
+							// always yields the same result, we have to do the
+							// comparison using
+							// the Time class, which is what the event queue
+							// does.
 							/*
-                            if (currentTime.getDoubleValue() <= elapsedTimeInSeconds) {
-                                break;
-                            }*/
+							 * if (currentTime.getDoubleValue() <=
+							 * elapsedTimeInSeconds) { break; }
+							 */
 
 							long timeToWait = (long) (currentTime.subtract(
 									elapsed).getDoubleValue() * 1000.0);
@@ -1957,8 +2077,10 @@ public abstract class HLADEDirector extends Director implements TimedDirector {
 									// UI interactions and may cause deadlocks.
 									// SOLUTION: workspace.wait(object, long).
 									_workspace.wait(_eventQueue, timeToWait);
-									// If we get here and either stop() or stopFire()
-									// was called, then it is not time to process any event,
+									// If we get here and either stop() or
+									// stopFire()
+									// was called, then it is not time to
+									// process any event,
 									// so we should leave it in the event queue.
 									if (_stopRequested || _stopFireRequested) {
 										return null;
@@ -2005,25 +2127,28 @@ public abstract class HLADEDirector extends Director implements TimedDirector {
 
 					// Advance the current time to the event time.
 					// NOTE: This is the only place that the model time changes.
-					
-					//setModelTime(currentTime);
-					
-					//aki
-					//HLA: Time avanced now based on RTI, and not on Ptolemy!
-					Time rtiTime = new Time(this, rtiFederation.getRTINextTime());
-					
-					//syso
-//					System.out.println("\t\tNext Ptolemy CurrentTime = " + currentTime.toString() + " Next CERTI Time = " + rtiTime.toString());
-					
-					if(rtiTime.getDoubleValue() < currentTime.getDoubleValue()){
-//						System.out.println("\n %%%% Ptolemy time advanced to : " + rtiTime);
+
+					// setModelTime(currentTime);
+
+					// aki
+					// HLA: Time avanced now based on RTI, and not on Ptolemy!
+					Time rtiTime = new Time(this,
+							rtiFederation.getRTINextTime());
+
+					// syso
+					// System.out.println("\t\tNext Ptolemy CurrentTime = " +
+					// currentTime.toString() + " Next CERTI Time = " +
+					// rtiTime.toString());
+
+					if (rtiTime.getDoubleValue() < currentTime.getDoubleValue()) {
+						// System.out.println("\n %%%% Ptolemy time advanced to : "
+						// + rtiTime);
 						setModelTime(rtiTime);
-					}
-					else{
-//						System.out.println("\n %%%% Ptolemy time advanced to : " + currentTime);
+					} else {
+						// System.out.println("\n %%%% Ptolemy time advanced to : "
+						// + currentTime);
 						setModelTime(currentTime);
 					}
-					
 
 					// Advance the current microstep to the event microstep.
 					_microstep = lastFoundEvent.microstep();
@@ -2047,8 +2172,10 @@ public abstract class HLADEDirector extends Director implements TimedDirector {
 				// event and a trigger event that go to the same actor.
 				if (nextEvent.hasTheSameTagAndDepthAs(lastFoundEvent)) {
 					// Consume the event from the queue and discard it.
-					// FIXME: This isn't right!  The microstep is only incremented
-					// by fireAt() calls. The Repeat actor, for one, produces a sequence
+					// FIXME: This isn't right! The microstep is only
+					// incremented
+					// by fireAt() calls. The Repeat actor, for one, produces a
+					// sequence
 					// of outputs, each of which will have the same microstep.
 					_eventQueue.take();
 				} else if (nextEvent.hasTheSameTagAs(lastFoundEvent)) {
@@ -2060,7 +2187,8 @@ public abstract class HLADEDirector extends Director implements TimedDirector {
 					if (actor == actorToFire) {
 						_eventQueue.take();
 					} else {
-						// Next event has a future tag or a different destination.
+						// Next event has a future tag or a different
+						// destination.
 						break;
 					}
 				} else {
@@ -2076,19 +2204,19 @@ public abstract class HLADEDirector extends Director implements TimedDirector {
 
 	// initialize parameters. Set all parameters to their default values.
 	private void _initParameters() {
-		
+
 		rtiFederation = new SlaveFederate();
-		
+
 		// Create and configure the parameters.
 		try {
 			federateName = new StringParameter(this, "federateName");
 			federateName.setExpression("PtolemyFederate");
-			
+
 			federateFile = new StringParameter(this, "federateFile");
-			//federateFile.setExpression("//Users//alissonbrito//Dropbox//workspace//certi2//testfom.fed");
-			federateFile.setExpression("C://Users//Angelo//Desktop//mestrado//Arquiteura de Computadores//Simuladores//workspace//SimulatorCerti//src//ptolemy//myactors//deslocamentoDeChuva//certi//testfom.fed");
-			
-			
+			// federateFile.setExpression("//Users//alissonbrito//Dropbox//workspace//certi2//testfom.fed");
+			federateFile
+					.setExpression("C://Users//Angelo//Desktop//mestrado//Arquiteura de Computadores//Simuladores//workspace//SimulatorCerti//src//ptolemy//myactors//deslocamentoDeChuva//certi//testfom.fed");
+
 		} catch (IllegalActionException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -2096,8 +2224,6 @@ public abstract class HLADEDirector extends Director implements TimedDirector {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-
-
 
 		try {
 			startTime = new Parameter(this, "startTime");
@@ -2139,12 +2265,14 @@ public abstract class HLADEDirector extends Director implements TimedDirector {
 		}
 	}
 
-	/** Request that the container of this director be refired in some
-	 *  future time specified by the first event of the local event queue.
-	 *  This method is used when the director is embedded inside an opaque
-	 *  composite actor. If the queue is empty, then throw an
-	 *  IllegalActionException.
-	 *  @exception IllegalActionException If the queue is empty.
+	/**
+	 * Request that the container of this director be refired in some future
+	 * time specified by the first event of the local event queue. This method
+	 * is used when the director is embedded inside an opaque composite actor.
+	 * If the queue is empty, then throw an IllegalActionException.
+	 * 
+	 * @exception IllegalActionException
+	 *                If the queue is empty.
 	 */
 	private void _requestFiring() throws IllegalActionException {
 		DEEvent nextEvent = null;
@@ -2162,33 +2290,37 @@ public abstract class HLADEDirector extends Director implements TimedDirector {
 				nextEvent.timeStamp());
 	}
 
-	///////////////////////////////////////////////////////////////////
-	////                         private variables                 ////
+	// /////////////////////////////////////////////////////////////////
+	// // private variables ////
 
 	/** A hashtable that caches the depths of actors. */
 	private Hashtable _actorToDepth = null;
 
-	/** Indicator that calls to fireAt() should be delegated
-	 *  to the executive director.
+	/**
+	 * Indicator that calls to fireAt() should be delegated to the executive
+	 * director.
 	 */
 	private boolean _delegateFireAt = false;
 
-	/** The set of actors that have returned false in their postfire()
-	 *  methods. Events destined for these actors are discarded and
-	 *  the actors are  never fired.
+	/**
+	 * The set of actors that have returned false in their postfire() methods.
+	 * Events destined for these actors are discarded and the actors are never
+	 * fired.
 	 */
 	private Set _disabledActors;
 
 	/** The queue used for sorting events. */
 	private DEEventQueue _eventQueue;
 
-	/** Set to true when the time stamp of the token to be dequeue
-	 *  has exceeded the stopTime.
+	/**
+	 * Set to true when the time stamp of the token to be dequeue has exceeded
+	 * the stopTime.
 	 */
 	private boolean _exceedStopTime = false;
 
-	/** A local boolean variable indicating whether this director is in
-	 *  initialization phase execution.
+	/**
+	 * A local boolean variable indicating whether this director is in
+	 * initialization phase execution.
 	 */
 	private boolean _isInitializing = false;
 
@@ -2206,8 +2338,9 @@ public abstract class HLADEDirector extends Director implements TimedDirector {
 	/** The real time at which the model begins executing. */
 	private long _realStartTime = 0;
 
-	/** Indicator of whether the topological sort giving ports their
-	 *  priorities is valid.
+	/**
+	 * Indicator of whether the topological sort giving ports their priorities
+	 * is valid.
 	 */
 	private long _sortValid = -1;
 
@@ -2220,16 +2353,18 @@ public abstract class HLADEDirector extends Director implements TimedDirector {
 	/** Stop time. */
 	private Time _stopTime;
 
-	/** Decide whether the simulation should be stopped when there's no more
-	 *  events in the global event queue. By default, its value is 'true',
-	 *  meaning that the simulation will stop under that circumstances.
-	 *  Setting it to 'false', instruct the director to wait on the queue
-	 *  while some other threads might enqueue events in it.
+	/**
+	 * Decide whether the simulation should be stopped when there's no more
+	 * events in the global event queue. By default, its value is 'true',
+	 * meaning that the simulation will stop under that circumstances. Setting
+	 * it to 'false', instruct the director to wait on the queue while some
+	 * other threads might enqueue events in it.
 	 */
 	private boolean _stopWhenQueueIsEmpty = true;
 
-	/** Specify whether the director should wait for elapsed real time to
-	 *  catch up with model time.
+	/**
+	 * Specify whether the director should wait for elapsed real time to catch
+	 * up with model time.
 	 */
 	private boolean _synchronizeToRealTime;
 

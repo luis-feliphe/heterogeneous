@@ -57,7 +57,7 @@ public class FederateAmbassador extends NullFederateAmbassador
 	//angelo - mudei
 	//protected Interaction receivedData 			= null;
 	
-	protected Attributes receivedData 			= null;
+	protected Attributes receivedData      = null;
 	protected LogicalTime lastReceivedTime = null;
 
 	//----------------------------------------------------------  

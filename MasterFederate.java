@@ -500,7 +500,10 @@ public class MasterFederate extends SigarCommandBase implements PtolemyFederate 
 		return rtiamb.registerObjectInstance(classHandle);
 	}
 
+	
+	
 	/**
+	 * 
 	 * This method will update all the values of the given object instance. It
 	 * will set each of the values to be a string which is equal to the name of
 	 * the attribute plus the current time. eg "aa:10.0" if the time is 10.0.
@@ -521,7 +524,7 @@ public class MasterFederate extends SigarCommandBase implements PtolemyFederate 
 		// we use EncodingHelpers to make things nice friendly for both Java and
 		// C++
 		
-		System.out.println("Ultimo valor Processado no master Federate => "+data);
+		//System.out.println("Ultimo valor Processado no master Federate => "+data);
 		
 		String[] tokens = data.split(" ; ");
 		
@@ -566,8 +569,8 @@ public class MasterFederate extends SigarCommandBase implements PtolemyFederate 
 			byte[] tag = EncodingHelpers.encodeString("hi!");
 			rtiamb.updateAttributeValues(objectHandle, attributes, tag);
 			CertiLogicalTime time = new CertiLogicalTime(fedamb.federateTime + fedamb.federateLookahead);
-			System.out.println("Valor adicionado no Attributes => " + valores[1]);
-			
+			//System.out.println("Valor adicionado no Attributes => " + valores[1]);
+			rtiamb.updateAttributeValues(objectHandle, attributes, tag, time);
 		}
 				
 

@@ -221,6 +221,7 @@ public class SlaveFederateActor extends TypedAtomicActor implements PtolemyFeder
 			} catch (ArrayIndexOutOfBounds e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
+				
 			}
         	
 			attributesToSend = null;
@@ -230,7 +231,7 @@ public class SlaveFederateActor extends TypedAtomicActor implements PtolemyFeder
         if (input.hasToken(0)) {
         	
             Token inputValue = input.get(0);
-                                                
+            /*                                    
             StringToken t = (StringToken) StringToken.convert(inputValue);// fazendo gambis
             StringToken string = StringToken.convert(t);
             double timeValue = getDirector().getModelTime().getDoubleValue();
@@ -249,7 +250,7 @@ public class SlaveFederateActor extends TypedAtomicActor implements PtolemyFeder
                 this.setTime(timeValue);
                 hasDataToSend = true;                
             }
-            
+            */
         }
     }
 
