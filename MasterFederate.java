@@ -379,7 +379,7 @@ public class MasterFederate extends SigarCommandBase implements PtolemyFederate 
 	 * same form
 	 */
 	private void log(String message) {
-		// System.out.println( "MasterFederate   : " + message );
+		 System.out.println( "MasterFederate   : " + message );
 	}
 
 	/**
@@ -448,6 +448,13 @@ public class MasterFederate extends SigarCommandBase implements PtolemyFederate 
 		int aaHandle = rtiamb.getAttributeHandle("canal1", classHandle);
 		int abHandle = rtiamb.getAttributeHandle("canal2", classHandle);
 		int acHandle = rtiamb.getAttributeHandle("canal3", classHandle);
+		int adHandle = rtiamb.getAttributeHandle("canal4", classHandle);
+		int aeHandle = rtiamb.getAttributeHandle("canal5", classHandle);
+		int afHandle = rtiamb.getAttributeHandle("canal6", classHandle);
+		int agHandle = rtiamb.getAttributeHandle("canal7", classHandle);
+		int ahHandle = rtiamb.getAttributeHandle("canal8", classHandle);
+		int aiHandle = rtiamb.getAttributeHandle("canal9", classHandle);
+		int ajHandle = rtiamb.getAttributeHandle("canal10", classHandle);
 
 		// int classHandle = rtiamb.getObjectClassHandle("InteractionRoot.X");
 		// int aaHandle = rtiamb.getAttributeHandle("xa", classHandle);
@@ -458,6 +465,13 @@ public class MasterFederate extends SigarCommandBase implements PtolemyFederate 
 		attributes.add(aaHandle);
 		attributes.add(abHandle);
 		attributes.add(acHandle);
+		attributes.add(adHandle);
+		attributes.add(aeHandle);
+		attributes.add(afHandle);
+		attributes.add(agHandle);
+		attributes.add(ahHandle);
+		attributes.add(aiHandle);
+		attributes.add(ajHandle);
 		// do the actual publication
 		rtiamb.publishObjectClass(classHandle, attributes);
 
@@ -539,9 +553,9 @@ public class MasterFederate extends SigarCommandBase implements PtolemyFederate 
 			
 			String[] valores = token.split(" - ");
 			
-			int classHandle = rtiamb.getObjectClass(objectHandle);
+			//O erro foi aqui 
 
-
+			int classHandle = rtiamb.getObjectClass(1);//objectHandle);
 
 			if (valores[0].equalsIgnoreCase("channel1")) {
 
@@ -560,7 +574,46 @@ public class MasterFederate extends SigarCommandBase implements PtolemyFederate 
 				byte[] acValue = EncodingHelpers.encodeString("canal3:"+ valores[1]);
 				int acHandle = rtiamb.getAttributeHandle("canal3", classHandle);
 				attributes.add(acHandle, acValue);
+			} else if (valores[0].equalsIgnoreCase("channel4")) {
+				
+				byte[] adValue = EncodingHelpers.encodeString("canal4:"+ valores[1]);
+				int adHandle = rtiamb.getAttributeHandle("canal4", classHandle);
+				attributes.add(adHandle, adValue);
+			} else if (valores[0].equalsIgnoreCase("channel5")) {
+				
+				byte[] aeValue = EncodingHelpers.encodeString("canal5:"+ valores[1]);
+				int aeHandle = rtiamb.getAttributeHandle("canal5", classHandle);
+				attributes.add(aeHandle, aeValue);
+			} else if (valores[0].equalsIgnoreCase("channel6")) {
+				
+				byte[] afValue = EncodingHelpers.encodeString("canal6:"+ valores[1]);
+				int afHandle = rtiamb.getAttributeHandle("canal6", classHandle);
+				attributes.add(afHandle, afValue);
 
+			} else if (valores[0].equalsIgnoreCase("channel7")) {
+				
+				byte[] agValue = EncodingHelpers.encodeString("canal7:"+ valores[1]);
+				int agHandle = rtiamb.getAttributeHandle("canal7", classHandle);
+				attributes.add(agHandle, agValue);
+				
+			} else if (valores[0].equalsIgnoreCase("channel8")) {
+				
+				byte[] ahValue = EncodingHelpers.encodeString("canal8:"+ valores[1]);
+				int ahHandle = rtiamb.getAttributeHandle("canal8", classHandle);
+				attributes.add(ahHandle, ahValue);
+
+			} else if (valores[0].equalsIgnoreCase("channel9")) {
+				
+				byte[] aiValue = EncodingHelpers.encodeString("canal9:"+ valores[1]);
+				int aiHandle = rtiamb.getAttributeHandle("canal9", classHandle);
+				attributes.add(aiHandle, aiValue);
+
+			} else if (valores[0].equalsIgnoreCase("channel10")) {
+				
+				byte[] ajValue = EncodingHelpers.encodeString("canal10:"+ valores[1]);
+				int ajHandle = rtiamb.getAttributeHandle("canal10", classHandle);
+				attributes.add(ajHandle, ajValue);
+				
 			}else {
 				System.out.println("O Valor não foi adicionado no Attributes => " + valores[1]);
 
@@ -571,7 +624,9 @@ public class MasterFederate extends SigarCommandBase implements PtolemyFederate 
 			CertiLogicalTime time = new CertiLogicalTime(fedamb.federateTime + fedamb.federateLookahead);
 			//System.out.println("Valor adicionado no Attributes => " + valores[1]);
 			rtiamb.updateAttributeValues(objectHandle, attributes, tag, time);
-		}
+
+
+			}
 				
 
 	}
@@ -632,7 +687,7 @@ public class MasterFederate extends SigarCommandBase implements PtolemyFederate 
 				+ timestep);
 		rtiamb.timeAdvanceRequest(newTime);
 
-		log("Time Advanced to " + fedamb.federateTime);
+		//log("Time Advanced to " + fedamb.federateTime);
 
 		// wait for the time advance to be granted. ticking will tell the
 		// LRC to start delivering callbacks to the federate
@@ -647,7 +702,7 @@ public class MasterFederate extends SigarCommandBase implements PtolemyFederate 
 		LogicalTime newTime = new CertiLogicalTime(nextStep);
 		rtiamb.timeAdvanceRequest(newTime);
 
-		log("Time Advanced to " + newTime);
+		//log("Time Advanced to " + newTime);
 
 		// wait for the time advance to be granted. ticking will tell the
 		// LRC to start delivering callbacks to the federate

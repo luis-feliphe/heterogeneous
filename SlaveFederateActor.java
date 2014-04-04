@@ -27,11 +27,14 @@
  */
 package ptolemy.myactors.MaximumEntropy;
 
+import java.util.Calendar;
+
 import hla.rti.ArrayIndexOutOfBounds;
 import hla.rti.jlc.EncodingHelpers;
 import ptolemy.actor.TypedAtomicActor;
 import ptolemy.actor.TypedIOPort;
 import ptolemy.actor.lib.conversions.ExpressionToToken;
+import ptolemy.data.BooleanToken;
 import ptolemy.data.DoubleToken;
 import ptolemy.data.IntMatrixToken;
 import ptolemy.data.RecordToken;
@@ -118,6 +121,8 @@ public class SlaveFederateActor extends TypedAtomicActor implements PtolemyFeder
         
         output = new TypedIOPort(this, "output", false, true);
         
+        eof= new TypedIOPort(this, "eof", false, true);
+
         myValue = new StringToken("");
         myTime = 0;
 
@@ -186,6 +191,9 @@ public class SlaveFederateActor extends TypedAtomicActor implements PtolemyFeder
      */
     public TypedIOPort output;
 
+    public TypedIOPort eof;
+
+    
     //private SlaveFederate rtiFederation;
     
     ///////////////////////////////////////////////////////////////////
@@ -211,11 +219,25 @@ public class SlaveFederateActor extends TypedAtomicActor implements PtolemyFeder
 			try {
 				
 				value = EncodingHelpers.decodeString(attributesToSend.getReceivedData().getValue(0));
-				System.out.println("Dado recebido: " + value);
+				//System.out.println("Dado recebido: " + value);
 			    v=  value.split(":");
 			    v[1] = v[1].replace("\"", "");
-			    IntToken it = new IntToken(v[1]);
-				output.send(0, it);
+			    if (v[1].equals("eof")){
+			    	eof.send(0, new BooleanToken(true));
+
+				    Calendar data = Calendar.getInstance();  
+				    int hora = data.get(Calendar.HOUR_OF_DAY);   
+				    int min = data.get(Calendar.MINUTE);  
+				    int seg = data.get(Calendar.SECOND);  
+				    int mseg = data.get(Calendar.MILLISECOND);  
+
+				    System.out.println("termino de simulação em " + hora + "horas, " + min + "min, " + seg +" segundos e" + mseg + "msegundos");
+				    terminate();
+			    
+			    }else{
+			    	IntToken it = new IntToken(v[1]);
+			    	output.send(0, it);
+			    }
 				
 	            
 			} catch (ArrayIndexOutOfBounds e) {

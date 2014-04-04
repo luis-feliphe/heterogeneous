@@ -34,6 +34,7 @@ import java.io.IOException;
 import java.lang.management.ManagementFactory;
 import java.net.MalformedURLException;
 import java.text.DecimalFormat;
+import java.util.Calendar;
 
 import javax.management.MBeanServerConnection;
 import javax.swing.JOptionPane;
@@ -125,7 +126,7 @@ public class SlaveFederate extends SigarCommandBase implements PtolemyFederate {
 	
 
 	private static String federateName = "ReadyToRun";
-	private static int slaveChannel = 1;
+	private static int slaveChannel = 5;
 
 
 	// ----------------------------------------------------------
@@ -197,6 +198,14 @@ public class SlaveFederate extends SigarCommandBase implements PtolemyFederate {
 		// user hits enter before proceeding. That was, you have time to start
 		// other federates.
 		waitForUser();
+		
+	    Calendar data = Calendar.getInstance();  
+	    int hora = data.get(Calendar.HOUR_OF_DAY);   
+	    int min = data.get(Calendar.MINUTE);  
+	    int seg = data.get(Calendar.SECOND);  
+	    int mseg = data.get(Calendar.MILLISECOND);  
+
+	    System.out.println("Simulaçao iniciada de " + hora + "horas, " + min + "min, " + seg +" segundos e" + mseg + "msegundos");
 
 		/*
 		 * MBeanServerConnection mbsc =

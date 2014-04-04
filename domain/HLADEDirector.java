@@ -451,7 +451,7 @@ public abstract class HLADEDirector extends Director implements TimedDirector {
 							if (fedActor.hasDataToSend()) {
 								String k = fedActor.getDataToSend().stringValue();
 								this.rtiFederation.sendData(k);
-								System.out.println("Data sent to HLA: " + k);
+								//System.out.println("Data sent to HLA: " + k);
 								// syso
 								// System.out.println("\t*** HLADirector - Data sent by "+
 								// fedActor.getClass().toString() +" at " +
